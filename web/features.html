@@ -31,9 +31,13 @@
   <meta name="twitter:image" content="https://lectory.dev/brand/logo.svg" />
 
   <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" />
+  </noscript>
 
   <!-- Central Stylesheet -->
   <link rel="stylesheet" href="/style.css" />
@@ -117,7 +121,10 @@
         </div>
         <div>
           <div style="background: #F8FAFC; border: 1px solid var(--color-border-medium); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);">
-            <img src="/images/pillar_roleplay.png" alt="Spoken Avatar Simulation Engine" style="width: 100%; height: auto; display: block;" />
+            <picture>
+              <source type="image/webp" srcset="/images/pillar_roleplay.webp" />
+              <img src="/images/pillar_roleplay.png" width="306" height="230" loading="lazy" decoding="async" alt="Spoken Avatar Simulation Engine" style="width: 100%; height: auto; display: block;" />
+            </picture>
           </div>
         </div>
       </div>
@@ -149,7 +156,10 @@
         </div>
         <div style="order: 1;">
           <div style="background: #F8FAFC; border: 1px solid var(--color-border-medium); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);">
-            <img src="/images/pillar_studio.png" alt="No-Code Course Studio" style="width: 100%; height: auto; display: block;" />
+            <picture>
+              <source type="image/webp" srcset="/images/pillar_studio.webp" />
+              <img src="/images/pillar_studio.png" width="306" height="230" loading="lazy" decoding="async" alt="No-Code Course Studio" style="width: 100%; height: auto; display: block;" />
+            </picture>
           </div>
         </div>
       </div>
@@ -181,7 +191,10 @@
         </div>
         <div>
           <div style="background: #F8FAFC; border: 1px solid var(--color-border-medium); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);">
-            <img src="/images/pillar_interface.png" alt="Intuitive Modern Interface & Analytics" style="width: 100%; height: auto; display: block;" />
+            <picture>
+              <source type="image/webp" srcset="/images/pillar_interface.webp" />
+              <img src="/images/pillar_interface.png" width="306" height="230" loading="lazy" decoding="async" alt="Intuitive Modern Interface & Analytics" style="width: 100%; height: auto; display: block;" />
+            </picture>
           </div>
         </div>
       </div>
