@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Sales &amp; Book Demo — Lectory</title>
+  <meta name="description" content="Get in touch with the Lectory team to schedule a custom enterprise simulation demo or discuss pilot rollouts." />
+
+  <!-- Canonical & PWA -->
+  <link rel="canonical" href="https://lectory.dev/contact.html" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Favicon Suite -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lectory" />
+  <meta property="og:url" content="https://lectory.dev/contact.html" />
+  <meta property="og:title" content="Contact Sales &amp; Book Demo — Lectory" />
+  <meta property="og:description" content="Get in touch with the Lectory team to schedule a custom enterprise simulation demo or discuss pilot rollouts." />
+  <meta property="og:image" content="https://lectory.dev/brand/logo.svg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact Sales &amp; Book Demo — Lectory" />
+  <meta name="twitter:description" content="Get in touch with the Lectory team to schedule a custom enterprise simulation demo or discuss pilot rollouts." />
+  <meta name="twitter:image" content="https://lectory.dev/brand/logo.svg" />
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Central Stylesheet -->
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <!-- Global Header Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo-link" title="Lectory Home">
+        <img src="/brand/logo.svg" alt="Lectory" height="34" style="height: 34px; width: auto; display: block;" />
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="/features.html" class="nav-link">Features</a></li>
+          <li><a href="/solutions.html" class="nav-link">Solutions</a></li>
+          <li><a href="/about.html" class="nav-link">About</a></li>
+          <li><a href="/contact.html" class="nav-link active">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="btn btn-ghost">Sign In</a>
+        <a href="https://app.lectory.dev" class="btn btn-primary">Go to App</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="legal-header">
+    <div class="container">
+      <span class="section-tag">Sales &amp; Consultations</span>
+      <h1 class="section-title">Let's Discuss Your Workforce Training Goals</h1>
+      <p class="section-sub">
+        Schedule a personalized consultation with a Lectory learning architect or inquire about custom scenario pilots.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Contact Section -->
+  <section class="section" style="padding-top: 40px;">
+    <div class="container">
+      <div class="contact-layout">
+
+        <!-- Form Card -->
+        <div class="contact-card">
+          <h2 style="font-size: 22px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Request a Demo or Enterprise Pilot</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Fill out the form below and our team will get back to you within 24 business hours.
+          </p>
+
+          <form id="contact-form" onsubmit="handleContactSubmit(event)">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="full-name">Full Name *</label>
+                <input type="text" id="full-name" name="name" class="form-control" placeholder="Jane Doe" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="work-email">Work Email *</label>
+                <input type="email" id="work-email" name="email" class="form-control" placeholder="jane@company.com" required />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="company-name">Company Name *</label>
+                <input type="text" id="company-name" name="company" class="form-control" placeholder="Acme Enterprises" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="job-title">Job Title / Role *</label>
+                <input type="text" id="job-title" name="role" class="form-control" placeholder="VP of Talent / L&D Lead" required />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="team-size">Target Learner Count</label>
+                <select id="team-size" name="teamSize" class="form-control">
+                  <option value="50-250">50 – 250 employees</option>
+                  <option value="250-1000" selected>250 – 1,000 employees</option>
+                  <option value="1000-5000">1,000 – 5,000 employees</option>
+                  <option value="5000+">5,000+ employees (Global Enterprise)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="primary-intent">Primary Area of Interest</label>
+                <select id="primary-intent" name="intent" class="form-control">
+                  <option value="demo">Custom Product Demo</option>
+                  <option value="compliance">HR &amp; Compliance Simulation</option>
+                  <option value="leadership">Manager &amp; Leadership Development</option>
+                  <option value="sales">Sales Objection Sandbox</option>
+                  <option value="scorm">LMS Integration (SCORM/xAPI/cmi5)</option>
+                  <option value="security">Security &amp; Procurement Review</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message">How can we help? (Optional)</label>
+              <textarea id="message" name="message" class="form-control" placeholder="Tell us about your current training workflows, compliance requirements, or timeline..."></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-teal btn-lg btn-full">
+              Submit Request &rarr;
+            </button>
+
+            <div id="success-msg" class="form-success-msg">
+              &#10003; Thank you! Your message has been routed to <code>contact@lectory.dev</code>. A learning architect will respond shortly.
+            </div>
+          </form>
+        </div>
+
+        <!-- Info & Assurance Side Panel -->
+        <div class="contact-info-panel">
+          
+          <div class="info-box">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2DD4BF" stroke-width="2.5"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              Direct Email Routing
+            </div>
+            <p class="info-box-desc">
+              All inquiries are routed directly to our executive inbox via Cloudflare Email Routing:
+              <br><br>
+              <strong>General &amp; Sales:</strong> <a href="mailto:contact@lectory.dev" style="color:var(--teal-bright);">contact@lectory.dev</a><br>
+              <strong>Customer Support:</strong> <a href="mailto:support@lectory.dev" style="color:var(--teal-bright);">support@lectory.dev</a>
+            </p>
+          </div>
+
+          <div class="info-box">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2DD4BF" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              Enterprise Confidentiality Guarantee
+            </div>
+            <p class="info-box-desc">
+              We strictly uphold zero data retention for AI model training. Your company handbooks, compliance guidelines, and conversation transcripts remain confidential and isolated under enterprise NDAs.
+            </p>
+          </div>
+
+          <div class="info-box">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2DD4BF" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Standard SLA &amp; Support
+            </div>
+            <p class="info-box-desc">
+              Our enterprise customer success team provides dedicated technical onboarding, custom rubric authoring assistance, and 99.9% uptime SLA commitments.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Brand Column -->
+        <div class="footer-brand-col">
+          <a href="/" style="display: inline-block;">
+            <img src="/brand/logo.svg" alt="Lectory" height="28" style="height: 28px; width: auto; display: block;" />
+          </a>
+          <p class="footer-tagline">
+            Real-time AI avatar simulations for enterprise training &amp; compliance.
+          </p>
+        </div>
+
+        <!-- Column 1: Platform -->
+        <div>
+          <h4 class="footer-col-title">Platform</h4>
+          <ul class="footer-col-links">
+            <li><a href="/features.html">Features</a></li>
+            <li><a href="/solutions.html">Solutions</a></li>
+            <li><a href="https://app.lectory.dev" target="_blank" rel="noopener noreferrer">Go to App</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Company -->
+        <div>
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-col-links">
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact Sales / Inquiries</a></li>
+            <li><a href="https://app.lectory.dev" target="_blank" rel="noopener noreferrer">System Status</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Trust & Legal -->
+        <div>
+          <h4 class="footer-col-title">Trust &amp; Legal</h4>
+          <ul class="footer-col-links">
+            <li><a href="/tos.html">Terms of Service</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/privacy.html#security">Security &amp; Trust</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Sub-bar -->
+      <div class="footer-bottom">
+        <div>&copy; 2026 Lectory, Inc. All rights reserved.</div>
+        <div class="footer-social-icons">
+          <a href="https://github.com/lectory" target="_blank" rel="noopener noreferrer" title="Lectory GitHub" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="https://x.com/lectorydev" target="_blank" rel="noopener noreferrer" title="Lectory on X" aria-label="X Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://linkedin.com/company/lectory" target="_blank" rel="noopener noreferrer" title="Lectory LinkedIn" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.9 0-1.63.73-1.63 1.63s.73 1.63 1.63 1.63 1.63-.73 1.63-1.63-.73-1.63-1.63-1.63z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Contact Form Handler -->
+  <script>
+    // Pre-fill intent if URL has query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const typeParam = urlParams.get('type');
+    if (typeParam) {
+      const intentSelect = document.getElementById('primary-intent');
+      if (intentSelect) {
+        if (typeParam === 'demo') intentSelect.value = 'demo';
+        if (typeParam === 'pilot') intentSelect.value = 'compliance';
+        if (typeParam === 'scorm') intentSelect.value = 'scorm';
+        if (typeParam === 'security') intentSelect.value = 'security';
+      }
+    }
+
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const successMsg = document.getElementById('success-msg');
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Routing Message...';
+
+      setTimeout(() => {
+        submitBtn.style.display = 'none';
+        successMsg.style.display = 'block';
+        form.reset();
+      }, 600);
+    }
+  </script>
+</body>
+</html>

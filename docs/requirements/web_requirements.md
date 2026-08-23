@@ -26,7 +26,7 @@ The marketing site addresses enterprise buyer and evaluator personas:
 ## 3. Header Navigation
 
 `
-[ LOGO ]        Features    Solutions    About    Contact        [ Sign In ]   [ Go to App → ]
+[ LOGO ]        Features    Solutions    About    Contact        [ Sign In ]   [ Go to App ]
 `
 
 - **Brand Logo:** Logo lockup linking to /index.html
