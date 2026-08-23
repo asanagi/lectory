@@ -31,9 +31,17 @@ Technical architecture, build scripts contract, static entry points, brand asset
 }
 ```
 
-- `npm run dev` — Local development server with Hot Module Replacement (HMR).
+- `npm run dev` — Local development server with Hot Module Replacement (HMR) at `http://localhost:8080`.
 - `npm run build` — Compiles static multi-page bundle to `dist/`.
-- `npm run preview` — Serves the production build locally at `http://localhost:4173` for pre-flight verification.
+- `npm run preview` — Serves the production build locally at `http://localhost:8080` for pre-flight verification.
+
+### Local Port Allocation Convention
+
+| Service / Layer | Local Port / Origin | Configuration | Purpose |
+| :--- | :--- | :--- | :--- |
+| **`web` (Marketing Site)** | `http://localhost:8080` | `server: { port: 8080, strictPort: true }` | Public marketing site, landing pages, and docs |
+| **`app` (Web Application)** | `http://localhost:8081` | `server: { port: 8081, strictPort: true }` | Core interactive app & learner simulation studio |
+| **`services` (Backend / APIs)** | `http://localhost:8082+` | Configured per service | Core API endpoints (`8082`), AI worker services (`8083`), etc. |
 
 ---
 
