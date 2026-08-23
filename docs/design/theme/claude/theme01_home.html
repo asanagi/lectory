@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lectory — Enterprise AI Avatar Simulation & Training Platform</title>
+<meta name="description" content="Replace passive training videos with real-time, interactive 3D AI avatar role-plays and automated rubric scoring. Zero pre-rendered video." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0B1220;
+    --navy-800:#16213D;
+    --navy-700:#1E3A8A;
+    --navy-600:#2748A8;
+    --navy-50:#EEF2FB;
+    --teal-600:#0E7490;
+    --teal-500:#14B8A6;
+    --teal-300:#5EEAD4;
+    --teal-50:#EAFBF8;
+    --surface:#FFFFFF;
+    --surface-alt:#F7F8FA;
+    --border:#E1E5EC;
+    --border-dark:#26314A;
+    --text-1:#0F172A;
+    --text-2:#4B5567;
+    --text-3:#8992A3;
+    --radius:6px;
+    --radius-lg:12px;
+    --max:1200px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--surface);
+    color:var(--text-2);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  section{ padding:88px 0; }
+  h1,h2,h3{ color:var(--text-1); letter-spacing:-0.01em; }
+  .serif{ font-family:'Source Serif 4',Georgia,serif; }
+  .mono{ font-family:'JetBrains Mono',monospace; }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--teal-600);
+    display:flex; align-items:center; gap:8px; margin-bottom:14px;
+  }
+  .eyebrow::before{ content:""; width:16px; height:1.5px; background:var(--teal-600); }
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head h2{ font-size:30px; font-weight:700; margin-bottom:12px; }
+  .section-head p{ font-size:15.5px; color:var(--text-2); }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+  .section-head.center .eyebrow{ justify-content:center; }
+  .section-head.center .eyebrow::before{ display:none; }
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    font-size:14px; font-weight:600; padding:11px 20px; border-radius:var(--radius);
+    border:1px solid transparent; cursor:pointer; transition:all .15s ease; white-space:nowrap;
+  }
+  .btn-primary{ background:var(--navy-700); color:#fff; border-color:var(--navy-700); box-shadow:0 1px 2px rgba(15,23,42,0.12); }
+  .btn-primary:hover{ background:var(--navy-800); border-color:var(--navy-800); }
+  .btn-primary:active{ background:var(--navy-900); }
+  .btn-secondary{ background:#fff; color:var(--navy-700); border-color:#C7D2E8; }
+  .btn-secondary:hover{ background:var(--navy-50); border-color:var(--navy-700); }
+  .btn-ghost{ background:transparent; color:var(--teal-600); padding-left:0; padding-right:0; }
+  .btn-ghost:hover{ color:var(--teal-500); gap:10px; }
+  .btn-on-dark{ background:rgba(255,255,255,0.08); color:#fff; border-color:rgba(255,255,255,0.28); }
+  .btn-on-dark:hover{ background:rgba(255,255,255,0.16); }
+  .btn-sm{ padding:8px 14px; font-size:13px; }
+  .btn-full{ width:100%; }
+
+  /* ============== EVAL BANNER (design-preview only) ============== */
+  .eval-banner{
+    background:var(--navy-900); color:#94A3B8; font-size:12px; padding:9px 28px;
+    display:flex; justify-content:center; align-items:center; gap:10px; text-align:center;
+    border-bottom:1px solid var(--border-dark);
+  }
+  .eval-banner strong{ color:#fff; font-weight:600; }
+  .eval-pill{ background:rgba(20,184,166,0.15); color:var(--teal-300); padding:2px 8px; border-radius:4px; font-size:10.5px; font-weight:600; border:1px solid rgba(20,184,166,0.3); font-family:'JetBrains Mono',monospace; }
+
+  /* ============== HEADER ============== */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:24px; }
+  .brand{ display:flex; align-items:center; gap:9px; flex-shrink:0; }
+  .brand svg{ width:26px; height:26px; }
+  .brand span{ font-size:18px; font-weight:800; color:var(--navy-900); letter-spacing:-0.02em; }
+  .brand span em{ font-style:normal; color:var(--teal-600); }
+
+  nav.primary{ display:flex; align-items:center; gap:2px; flex:1; justify-content:center; }
+  .nav-item{ position:relative; }
+  .nav-link{
+    display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:600; color:var(--text-2);
+    padding:10px 14px; border-radius:var(--radius); cursor:pointer;
+  }
+  .nav-link:hover{ color:var(--navy-700); background:var(--surface-alt); }
+  .nav-link svg{ width:11px; height:11px; opacity:0.6; }
+  .dropdown{
+    position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+    background:#fff; border:1px solid var(--border); border-radius:10px;
+    box-shadow:0 16px 40px rgba(15,23,42,0.14);
+    padding:10px; min-width:280px;
+    opacity:0; visibility:hidden; transform:translateX(-50%) translateY(4px);
+    transition:opacity .14s ease, transform .14s ease, visibility .14s;
+  }
+  .nav-item:hover .dropdown{ opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+  .dropdown a{ display:block; padding:10px 12px; border-radius:7px; }
+  .dropdown a:hover{ background:var(--surface-alt); }
+  .dropdown .d-title{ font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:2px; }
+  .dropdown .d-desc{ font-size:12px; color:var(--text-3); line-height:1.4; }
+
+  .nav-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .nav-actions .signin{ font-size:13.5px; font-weight:600; color:var(--text-2); padding:9px 12px; }
+  .nav-actions .signin:hover{ color:var(--navy-700); }
+
+  @media (max-width:980px){ nav.primary{ display:none; } }
+
+  /* ============== HERO ============== */
+  .hero{ padding:76px 0 64px; position:relative; overflow:hidden; }
+  .hero::before{
+    content:""; position:absolute; top:-160px; right:-220px; width:640px; height:640px; border-radius:50%;
+    background:radial-gradient(circle, rgba(30,58,138,0.07) 0%, rgba(20,184,166,0.05) 55%, transparent 72%);
+    pointer-events:none;
+  }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; position:relative; }
+  @media (max-width:980px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600;
+    color:var(--teal-600); background:var(--teal-50); border:1px solid #BEEEE6; padding:6px 12px; border-radius:99px; margin-bottom:22px;
+  }
+  .hero-badge .dot{ width:6px; height:6px; border-radius:50%; background:var(--teal-500); }
+  h1.hero-title{ font-size:clamp(32px,4.2vw,50px); font-weight:700; line-height:1.1; margin-bottom:20px; }
+  .hero-sub{ font-size:17px; color:var(--text-2); max-width:520px; margin-bottom:30px; line-height:1.65; }
+  .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:30px; }
+  .hero-ctas .btn{ padding:13px 24px; font-size:15px; }
+  .hero-strip{ display:flex; flex-wrap:wrap; gap:8px; }
+  .hero-strip-item{
+    display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--text-2);
+    background:var(--surface-alt); border:1px solid var(--border); padding:6px 11px; border-radius:99px;
+  }
+  .hero-strip-item svg{ width:12px; height:12px; color:var(--teal-600); flex-shrink:0; }
+
+  /* Hero visual: avatar session mockup */
+  .hero-visual{
+    background:linear-gradient(165deg,var(--navy-900) 0%, var(--navy-800) 60%, #0C2B33 130%);
+    border-radius:18px; padding:22px; position:relative; box-shadow:0 24px 60px rgba(11,18,32,0.35);
+  }
+  .hv-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .hv-live{ display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--teal-300); font-weight:600; letter-spacing:0.04em; }
+  .hv-live .pulse{ width:6px; height:6px; border-radius:50%; background:var(--teal-300); animation:pulse 2.2s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .hv-track{ font-size:10.5px; color:#8CA0C6; font-family:'JetBrains Mono',monospace; }
+  .hv-stage{
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09); border-radius:12px;
+    padding:26px 20px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; margin-bottom:14px;
+  }
+  .hv-avatar{
+    width:68px; height:68px; border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #3555B0, var(--navy-900));
+    position:relative; display:flex; align-items:center; justify-content:center;
+  }
+  .hv-avatar::before{ content:""; width:26px; height:26px; border-radius:50%; background:var(--teal-500); }
+  .hv-avatar .ring{ position:absolute; inset:-9px; border-radius:50%; border:1px solid rgba(20,184,166,0.45); animation:ringpulse 2.4s ease-out infinite; }
+  @keyframes ringpulse{ 0%{ transform:scale(0.88); opacity:0.6;} 100%{ transform:scale(1.35); opacity:0;} }
+  .hv-line{ font-size:13px; color:#DCE4F5; max-width:260px; line-height:1.5; }
+  .hv-line strong{ color:#fff; }
+  .hv-scorebar{ display:flex; gap:8px; }
+  .hv-score{ flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:9px 10px; }
+  .hv-score .k{ font-size:9.5px; font-family:'JetBrains Mono',monospace; color:#7C8CB0; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+  .hv-score .v{ font-size:13.5px; font-weight:700; color:var(--teal-300); }
+
+  /* ============== TRUST STRIP ============== */
+  .trust{ padding:44px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface-alt); }
+  .trust-label{ text-align:center; font-size:11.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:26px; }
+  .logo-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-bottom:28px; }
+  .logo-chip{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px; color:var(--text-3); padding:9px 18px; border:1px solid var(--border); border-radius:var(--radius); background:#fff; letter-spacing:0.02em; }
+  .badge-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+  .trust-badge{ display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--navy-700); background:var(--navy-50); border:1px solid #CBD8F2; padding:7px 13px; border-radius:99px; }
+  .trust-badge svg{ width:13px; height:13px; }
+
+  /* ============== TRY A CLASS TEASER ============== */
+  .track-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:900px){ .track-grid{ grid-template-columns:1fr; } }
+  .track-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:26px; background:#fff; transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
+  .track-card:hover{ border-color:#C7D2E8; box-shadow:0 12px 30px rgba(15,23,42,0.08); transform:translateY(-2px); }
+  .track-icon{ width:42px; height:42px; border-radius:10px; background:var(--navy-50); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .track-icon svg{ width:20px; height:20px; color:var(--navy-700); }
+  .track-card h3{ font-size:16.5px; font-weight:700; margin-bottom:8px; }
+  .track-card p{ font-size:13.5px; color:var(--text-2); margin-bottom:18px; line-height:1.55; }
+  .track-meta{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-3); margin-bottom:14px; }
+
+  /* ============== ARCHITECTURE TEARDOWN ============== */
+  .teardown{ background:var(--navy-900); color:#C4CEE3; }
+  .teardown .section-head h2, .teardown .section-head p{ color:#fff; }
+  .teardown .section-head p{ color:#AEB9D6; }
+  .teardown .eyebrow{ color:var(--teal-300); }
+  .teardown .eyebrow::before{ background:var(--teal-300); }
+  .compare-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:900px){ .compare-grid{ grid-template-columns:1fr; } }
+  .compare-col{ border-radius:var(--radius-lg); padding:26px; border:1px solid rgba(255,255,255,0.08); }
+  .compare-col.legacy{ background:rgba(255,255,255,0.03); }
+  .compare-col.lectory{ background:linear-gradient(165deg, rgba(20,184,166,0.1), rgba(20,184,166,0.02)); border-color:rgba(20,184,166,0.35); }
+  .compare-tag{ font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:4px 10px; border-radius:4px; display:inline-block; margin-bottom:14px; }
+  .compare-col.legacy .compare-tag{ background:rgba(255,255,255,0.08); color:#AEB9D6; }
+  .compare-col.lectory .compare-tag{ background:rgba(20,184,166,0.18); color:var(--teal-300); }
+  .compare-flow{ display:flex; flex-direction:column; gap:0; margin-bottom:18px; }
+  .flow-step{ display:flex; align-items:flex-start; gap:12px; padding:11px 0; font-size:13px; color:#DCE4F5; }
+  .flow-step .flow-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:#6B7A9E; flex-shrink:0; width:16px; padding-top:1px; }
+  .compare-col.lectory .flow-step .flow-num{ color:var(--teal-300); }
+  .flow-step:not(:last-child){ border-bottom:1px dashed rgba(255,255,255,0.08); }
+  .compare-metric{ font-size:22px; font-weight:700; font-family:'Source Serif 4',serif; }
+  .compare-col.legacy .compare-metric{ color:#F0A5A5; }
+  .compare-col.lectory .compare-metric{ color:var(--teal-300); }
+  .compare-metric-label{ font-size:12px; color:#8CA0C6; margin-top:4px; }
+
+  /* ============== WEDGE GRID ============== */
+  .wedge-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  @media (max-width:980px){ .wedge-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px){ .wedge-grid{ grid-template-columns:1fr; } }
+  .wedge-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 20px; }
+  .wedge-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--teal-600); font-weight:600; margin-bottom:14px; }
+  .wedge-icon{ width:38px; height:38px; border-radius:9px; background:var(--navy-50); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .wedge-icon svg{ width:18px; height:18px; color:var(--navy-700); }
+  .wedge-card h3{ font-size:15px; font-weight:700; margin-bottom:8px; }
+  .wedge-card p{ font-size:13px; color:var(--text-2); line-height:1.55; }
+
+  /* ============== USE CASE TABS ============== */
+  .tabs-bar{ display:flex; gap:6px; border-bottom:1px solid var(--border); margin-bottom:32px; flex-wrap:wrap; }
+  .tab-btn{ font-size:13.5px; font-weight:600; color:var(--text-3); padding:12px 6px; margin-right:22px; border-bottom:2px solid transparent; cursor:pointer; background:none; border-top:none; border-left:none; border-right:none; font-family:inherit; }
+  .tab-btn:hover{ color:var(--navy-700); }
+  .tab-btn.active{ color:var(--navy-700); border-bottom-color:var(--navy-700); }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  @media (max-width:900px){ .tab-panel.active{ grid-template-columns:1fr; } }
+  .tab-copy h3{ font-size:22px; font-weight:700; margin-bottom:12px; }
+  .tab-copy p{ font-size:14.5px; color:var(--text-2); margin-bottom:20px; line-height:1.65; }
+  .tab-copy ul{ list-style:none; margin-bottom:24px; display:flex; flex-direction:column; gap:10px; }
+  .tab-copy li{ display:flex; gap:9px; font-size:13.5px; color:var(--text-2); align-items:flex-start; }
+  .tab-copy li svg{ width:15px; height:15px; color:var(--teal-600); flex-shrink:0; margin-top:2px; }
+  .tab-visual{ background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; }
+  .tab-visual .quote{ font-family:'Source Serif 4',serif; font-size:17px; color:var(--text-1); line-height:1.5; margin-bottom:16px; }
+  .tab-visual .quote-meta{ font-size:12px; color:var(--text-3); font-weight:600; }
+
+  /* ============== BOTTOM BANNER ============== */
+  .banner{ background:linear-gradient(120deg,var(--navy-800) 0%, var(--navy-900) 55%, #0B2A2E 130%); border-radius:20px; padding:56px 48px; text-align:center; }
+  @media (max-width:640px){ .banner{ padding:40px 24px; } }
+  .banner h2{ color:#fff; font-size:28px; font-weight:700; margin-bottom:12px; }
+  .banner p{ color:#B9C4E0; font-size:15px; max-width:480px; margin:0 auto 26px; }
+  .banner-ctas{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+
+  /* ============== FOOTER ============== */
+  footer{ background:var(--navy-900); color:#8CA0C6; padding:64px 0 28px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr repeat(5,1fr); gap:28px; margin-bottom:48px; }
+  @media (max-width:980px){ .footer-grid{ grid-template-columns:1fr 1fr 1fr; } }
+  @media (max-width:640px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+  .footer-brand .brand span{ color:#fff; }
+  .footer-brand p{ font-size:13px; color:#7C8CB0; margin-top:12px; max-width:220px; line-height:1.6; }
+  .foot-col h4{ font-size:11.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#5C6B90; margin-bottom:14px; }
+  .foot-col a{ display:block; font-size:13px; color:#AEB9D6; padding:6px 0; }
+  .foot-col a:hover{ color:#fff; }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; padding-top:26px; border-top:1px solid rgba(255,255,255,0.08); font-size:12.5px; color:#5C6B90; }
+  .social-row{ display:flex; gap:14px; }
+  .social-row a{ color:#7C8CB0; }
+  .social-row a:hover{ color:var(--teal-300); }
+</style>
+</head>
+<body>
+
+  <div class="eval-banner">
+    <span><strong>Design preview</strong> — Theme 01 "Executive Trust" applied to the Home page</span>
+    <span class="eval-pill">docs/design/claude</span>
+  </div>
+
+  <!-- ============== HEADER ============== -->
+  <header class="site">
+    <div class="wrap nav-row">
+      <a href="/" class="brand">
+        <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(256, 256) scale(1.35) translate(-394.15, -384.1)">
+            <path fill="#14B8A6" d="M336.111 284.692C344.639 252.922 368.366 238.32 400.434 238.373L400.42 351.537C400.421 365.362 399.566 394.262 400.638 407.008L401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C468.919 486.787 463.467 501.113 450.747 512.841C437.271 525.268 420.74 529.931 402.713 529.772C375.229 529.531 347.691 529.908 320.21 529.634C310.082 529.533 298.86 526.016 292.139 518.207C282.431 507.269 283.235 495.638 283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692Z"/>
+            <path fill="#074D8C" d="M336.111 284.692C344.639 252.922 368.366 238.32 400.434 238.373L400.42 351.537C400.421 365.362 399.566 394.262 400.638 407.008C381.472 407.507 359.81 403.569 346.145 418.478C340.075 425.101 336.736 432.644 335.296 441.416L335.195 455.254C319.925 455.119 306.572 453.458 294.52 464.751C286.924 471.867 286.783 477.293 283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692Z"/>
+            <path fill="#1E3A8A" d="M283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692C334.627 295.692 335.301 319.81 335.325 331.662L335.315 405.764C335.3 416.578 335.721 430.839 335.296 441.416L335.195 455.254C319.925 455.119 306.572 453.458 294.52 464.751C286.924 471.867 286.783 477.293 283.347 482.151Z"/>
+            <path fill="#1E3A8A" d="M401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C461.171 471.906 456.552 472.494 447.804 472.385C439.179 471.281 410.145 471.811 400.492 471.761L400.39 429.416C400.384 424.976 400.091 410.962 401.033 407.279Z"/>
+            <path fill="#087692" d="M400.638 407.008L401.033 407.279C400.091 410.962 400.384 424.976 400.39 429.416L400.492 471.761C410.145 471.811 439.179 471.281 447.804 472.385C445.336 472.618 442.932 472.644 440.458 472.628C405.363 472.396 370.321 471.931 335.222 472.029L335.195 455.254L335.296 441.416C336.736 432.644 340.075 425.101 346.145 418.478C359.81 403.569 381.472 407.507 400.638 407.008Z"/>
+          </g>
+        </svg>
+        <span>lect<em>o</em>ry</span>
+      </a>
+
+      <nav class="primary">
+        <div class="nav-item">
+          <div class="nav-link">Platform <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+          <div class="dropdown">
+            <a href="#"><div class="d-title">Real-Time Simulation Engine</div><div class="d-desc">Client-side WebGL/WebGPU runtime with live conversational avatars.</div></a>
+            <a href="#"><div class="d-title">Single-Canvas AI Studio</div><div class="d-desc">Zero-video scenario construction &amp; instant policy updates.</div></a>
+            <a href="#"><div class="d-title">Automated Rubrics &amp; Analytics</div><div class="d-desc">Objective scoring, behavioral evaluation, audit dashboards.</div></a>
+            <a href="#"><div class="d-title">Frictionless Cohort Dispatch</div><div class="d-desc">One-click Slack, Teams, and magic link distribution.</div></a>
+          </div>
+        </div>
+        <div class="nav-item"><a href="#" class="nav-link">Why Real-Time</a></div>
+        <div class="nav-item">
+          <div class="nav-link">Solutions <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+          <div class="dropdown">
+            <a href="#"><div class="d-title">HR &amp; Compliance Training</div><div class="d-desc">Audit-ready harassment and ethics simulations.</div></a>
+            <a href="#"><div class="d-title">Manager &amp; Leadership Development</div><div class="d-desc">Safe sandbox for difficult 1-on-1s, feedback, and PIPs.</div></a>
+            <a href="#"><div class="d-title">Sales &amp; CS Enablement</div><div class="d-desc">Dynamic objection handling and negotiation role-play.</div></a>
+            <a href="#"><div class="d-title">New Hire Onboarding</div><div class="d-desc">Interactive culture immersion and policy navigation.</div></a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-link">Enterprise <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+          <div class="dropdown">
+            <a href="#"><div class="d-title">LMS &amp; Tools Integration</div><div class="d-desc">SCORM 1.2/2004, xAPI, cmi5, Workday, Cornerstone, Slack, Teams.</div></a>
+            <a href="#"><div class="d-title">Security &amp; Trust Center</div><div class="d-desc">SOC2 alignment, SAML SSO, RBAC, zero training-data retention.</div></a>
+          </div>
+        </div>
+        <div class="nav-item"><a href="#" class="nav-link">Pricing</a></div>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="signin">Sign In</a>
+        <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=nav_demo" class="btn btn-primary btn-sm">Book a Demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="hero-badge"><span class="dot"></span>Now live: real-time avatar runtime v2</span>
+        <h1 class="hero-title serif">Turn passive training videos into live, real-time AI avatar simulations.</h1>
+        <p class="hero-sub">Active voice-to-voice scenario training with instant behavioral scoring. Zero pre-rendered video.</p>
+        <div class="hero-ctas">
+          <a href="https://app.lectory.dev/try?utm_source=marketing&utm_medium=home_hero" class="btn btn-primary">Try a Class</a>
+          <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=home_hero" class="btn btn-secondary">Book a Demo</a>
+        </div>
+        <div class="hero-strip">
+          <span class="hero-strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Zero Video Rendering</span>
+          <span class="hero-strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>SCORM &amp; xAPI Compliant</span>
+          <span class="hero-strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>10s Cloud Policy Edits</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hv-topbar">
+          <span class="hv-live"><span class="pulse"></span>LIVE SESSION</span>
+          <span class="hv-track">track: manager_1on1</span>
+        </div>
+        <div class="hv-stage">
+          <div class="hv-avatar"><span class="ring"></span></div>
+          <p class="hv-line"><strong>Avatar (Jordan, Direct Report):</strong> "Can we talk about the feedback from last week? I felt blindsided."</p>
+        </div>
+        <div class="hv-scorebar">
+          <div class="hv-score"><div class="k">Empathy</div><div class="v">92%</div></div>
+          <div class="hv-score"><div class="k">Clarity</div><div class="v">87%</div></div>
+          <div class="hv-score"><div class="k">Policy</div><div class="v">100%</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TRUST STRIP ============== -->
+  <section class="trust" style="padding:44px 0;">
+    <div class="wrap">
+      <div class="trust-label">Trusted by L&amp;D and People Ops teams evaluating real-time training</div>
+      <div class="logo-row">
+        <span class="logo-chip">ACME CORP</span>
+        <span class="logo-chip">NORTHWIND</span>
+        <span class="logo-chip">GLOBEX</span>
+        <span class="logo-chip">INITECH</span>
+        <span class="logo-chip">UMBRELLA GROUP</span>
+      </div>
+      <div class="badge-row">
+        <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>SOC 2 Roadmap</span>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>SAML SSO</span>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>xAPI / cmi5 Certified</span>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>GDPR Ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TRY A CLASS TEASER ============== -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Try It Yourself</div>
+        <h2>Three interactive turns. One real scorecard.</h2>
+        <p>Pick a track and step into the conversation — no account required, no compute exposure on our side.</p>
+      </div>
+      <div class="track-grid">
+        <div class="track-card">
+          <div class="track-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7 4h10a2 2 0 012 2v13a1 1 0 01-1.45.9L12 17l-5.55 2.9A1 1 0 015 19V6a2 2 0 012-2z"/></svg></div>
+          <h3>HR Compliance</h3>
+          <p>Audit-ready harassment prevention and ethics role-play, scored against your policy language.</p>
+          <div class="track-meta">track=compliance · 3 turns</div>
+          <a href="https://app.lectory.dev/try?track=compliance&utm_source=marketing&utm_medium=home_preview" class="btn btn-secondary btn-sm btn-full">Try Compliance Scenario</a>
+        </div>
+        <div class="track-card">
+          <div class="track-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div>
+          <h3>Manager 1-on-1</h3>
+          <p>Practice a difficult feedback conversation with an avatar that reacts to your tone and word choice.</p>
+          <div class="track-meta">track=leadership · 3 turns</div>
+          <a href="https://app.lectory.dev/try?track=leadership&utm_source=marketing&utm_medium=home_preview" class="btn btn-secondary btn-sm btn-full">Try Manager 1-on-1</a>
+        </div>
+        <div class="track-card">
+          <div class="track-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+          <h3>Sales Objection</h3>
+          <p>Handle a live pricing objection from a skeptical buyer persona and get an instant coaching note.</p>
+          <div class="track-meta">track=sales · 3 turns</div>
+          <a href="https://app.lectory.dev/try?track=sales&utm_source=marketing&utm_medium=home_preview" class="btn btn-secondary btn-sm btn-full">Try Sales Simulation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ARCHITECTURE TEARDOWN ============== -->
+  <section class="teardown">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Wedge 01 &amp; 04 — Why Real-Time</div>
+        <h2>A policy edit shouldn't take a GPU render queue.</h2>
+        <p>Legacy video LMS content is a pipeline. Lectory content is a live state graph.</p>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-col legacy">
+          <span class="compare-tag">Legacy Video LMS</span>
+          <div class="compare-flow">
+            <div class="flow-step"><span class="flow-num">01</span>Articulate / Captivate script draft</div>
+            <div class="flow-step"><span class="flow-num">02</span>Studio / HeyGen pre-rendered MP4</div>
+            <div class="flow-step"><span class="flow-num">03</span>Video encoding &amp; compression</div>
+            <div class="flow-step"><span class="flow-num">04</span>SCORM packaging (.zip)</div>
+            <div class="flow-step"><span class="flow-num">05</span>Re-upload &amp; re-test in the LMS</div>
+          </div>
+          <div class="compare-metric">Hours–Days</div>
+          <div class="compare-metric-label">per single dialogue edit</div>
+        </div>
+        <div class="compare-col lectory">
+          <span class="compare-tag">Lectory Real-Time</span>
+          <div class="compare-flow">
+            <div class="flow-step"><span class="flow-num">01</span>Edit in the browser authoring canvas</div>
+            <div class="flow-step"><span class="flow-num">02</span>Scenario state updates as JSON</div>
+            <div class="flow-step"><span class="flow-num">03</span>Real-time WebGL/TTS runtime syncs</div>
+          </div>
+          <div class="compare-metric mono">&lt;10s</div>
+          <div class="compare-metric-label">live for every learner, zero re-upload</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== WEDGE GRID ============== -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">The Platform</div>
+        <h2>Everything a check-the-box LMS was missing.</h2>
+        <p>Four capabilities that only make sense once training runs live, in the browser.</p>
+      </div>
+      <div class="wedge-grid">
+        <div class="wedge-card">
+          <div class="wedge-num">WEDGE 02</div>
+          <div class="wedge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div>
+          <h3>Real-Time Avatars</h3>
+          <p>Voice-to-voice, multi-avatar office role-play with adaptive branching — not a decision tree of video clips.</p>
+        </div>
+        <div class="wedge-card">
+          <div class="wedge-num">WEDGE 04</div>
+          <div class="wedge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/></svg></div>
+          <h3>Single-Canvas Studio</h3>
+          <p>Prompt, script, cast a voice, and set a rubric in one browser tab — no actors, no studio gear.</p>
+        </div>
+        <div class="wedge-card">
+          <div class="wedge-num">WEDGE 03</div>
+          <div class="wedge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-5 3 3 5-7"/></svg></div>
+          <h3>Automated Scorecards</h3>
+          <p>Every session scored on empathy, clarity, and policy adherence — audit-ready, zero manual grading.</p>
+        </div>
+        <div class="wedge-card">
+          <div class="wedge-num">WEDGE 05</div>
+          <div class="wedge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM17 14v6M14 17h6"/></svg></div>
+          <h3>Slack &amp; Teams Dispatch</h3>
+          <p>One-click magic links into cohorts of any size — zero portal logins, zero onboarding friction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== USE CASE TABS ============== -->
+  <section style="background:var(--surface-alt);">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Enterprise Use Cases</div>
+        <h2>Built for the conversations that are hardest to train for.</h2>
+      </div>
+
+      <div class="tabs-bar">
+        <button class="tab-btn active" data-tab="compliance">HR &amp; Compliance</button>
+        <button class="tab-btn" data-tab="leadership">Leadership</button>
+        <button class="tab-btn" data-tab="sales">Sales Enablement</button>
+        <button class="tab-btn" data-tab="onboarding">Onboarding</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-compliance">
+        <div class="tab-copy">
+          <h3>Audit-ready compliance role-play</h3>
+          <p>Harassment prevention, DE&amp;I, ethics, and whistleblowing scenarios that score policy adherence directly against your handbook language.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Rubric grading on policy adherence, tone, and clarity</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Audit-ready completion export for compliance officers</li>
+          </ul>
+          <a href="https://app.lectory.dev/try?track=compliance&utm_source=marketing&utm_medium=sol_compliance" class="btn btn-primary">Try Compliance Scenario</a>
+        </div>
+        <div class="tab-visual">
+          <p class="quote serif">"We finally have a defensible, scored record that harassment training wasn't just a checkbox video."</p>
+          <p class="quote-meta">— Compliance Training Officer, illustrative persona</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-leadership">
+        <div class="tab-copy">
+          <h3>A sandbox for first-time managers</h3>
+          <p>Rehearse difficult 1-on-1s, constructive feedback, and performance improvement plans before the real conversation happens.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Adaptive avatar reactions to tone and word choice</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Private, judgement-free practice before peers or reports</li>
+          </ul>
+          <a href="https://app.lectory.dev/try?track=leadership&utm_source=marketing&utm_medium=sol_leadership" class="btn btn-primary">Try Manager 1-on-1</a>
+        </div>
+        <div class="tab-visual">
+          <p class="quote serif">"New managers ran the PIP conversation three times in the sandbox before they ran it once for real."</p>
+          <p class="quote-meta">— L&amp;D Program Manager, illustrative persona</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-sales">
+        <div class="tab-copy">
+          <h3>Objection handling under real pressure</h3>
+          <p>High-stakes negotiation and objection-handling role-play with buyer personas tuned to your product and pricing.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Dynamic objection branching, never the same script twice</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Coaching notes tied to close-rate-relevant behaviors</li>
+          </ul>
+          <a href="https://app.lectory.dev/try?track=sales&utm_source=marketing&utm_medium=sol_sales" class="btn btn-primary">Try Sales Simulation</a>
+        </div>
+        <div class="tab-visual">
+          <p class="quote serif">"It's the closest thing to call-shadowing we've found that scales to a global sales floor."</p>
+          <p class="quote-meta">— VP Sales Enablement, illustrative persona</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-onboarding">
+        <div class="tab-copy">
+          <h3>Culture immersion from day one</h3>
+          <p>Interactive company policy walk-throughs and simulated cross-functional interactions for new hires.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Runtime personalization by name, department, and manager</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Zero-friction magic-link launch from day-one email</li>
+          </ul>
+          <a href="https://app.lectory.dev/try?track=onboarding&utm_source=marketing&utm_medium=sol_onboarding" class="btn btn-primary">Try Onboarding Simulation</a>
+        </div>
+        <div class="tab-visual">
+          <p class="quote serif">"New hires meet 'their manager' in a simulation before they meet them in person."</p>
+          <p class="quote-meta">— People Operations Lead, illustrative persona</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== BOTTOM BANNER ============== -->
+  <section>
+    <div class="wrap">
+      <div class="banner">
+        <h2 class="serif">See it live in under three minutes.</h2>
+        <p>No install, no studio, no waiting on a render queue — just a conversation.</p>
+        <div class="banner-ctas">
+          <a href="https://app.lectory.dev/signup?utm_source=marketing&utm_medium=home_footer_banner" class="btn btn-primary">Get Started</a>
+          <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=home_footer_banner" class="btn btn-on-dark">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;">
+              <g transform="translate(256, 256) scale(1.35) translate(-394.15, -384.1)">
+                <path fill="#14B8A6" d="M336.111 284.692C344.639 252.922 368.366 238.32 400.434 238.373L400.42 351.537C400.421 365.362 399.566 394.262 400.638 407.008L401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C468.919 486.787 463.467 501.113 450.747 512.841C437.271 525.268 420.74 529.931 402.713 529.772C375.229 529.531 347.691 529.908 320.21 529.634C310.082 529.533 298.86 526.016 292.139 518.207C282.431 507.269 283.235 495.638 283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692Z"/>
+                <path fill="#1E3A8A" d="M283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692C334.627 295.692 335.301 319.81 335.325 331.662L335.315 405.764C335.3 416.578 335.721 430.839 335.296 441.416L335.195 455.254C319.925 455.119 306.572 453.458 294.52 464.751C286.924 471.867 286.783 477.293 283.347 482.151Z"/>
+                <path fill="#1E3A8A" d="M401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C461.171 471.906 456.552 472.494 447.804 472.385C439.179 471.281 410.145 471.811 400.492 471.761L400.39 429.416C400.384 424.976 400.091 410.962 401.033 407.279Z"/>
+                <path fill="#087692" d="M400.638 407.008L401.033 407.279C400.091 410.962 400.384 424.976 400.39 429.416L400.492 471.761C410.145 471.811 439.179 471.281 447.804 472.385C445.336 472.618 442.932 472.644 440.458 472.628C405.363 472.396 370.321 471.931 335.222 472.029L335.195 455.254L335.296 441.416C336.736 432.644 340.075 425.101 346.145 418.478C359.81 403.569 381.472 407.507 400.638 407.008Z"/>
+              </g>
+            </svg>
+            <span>lect<em>o</em>ry</span>
+          </div>
+          <p>Real-time AI avatar simulation and training for enterprise HR, L&amp;D, and People Ops.</p>
+        </div>
+        <div class="foot-col">
+          <h4>Product &amp; Tech</h4>
+          <a href="#">Real-Time Runtime</a>
+          <a href="#">AI Studio</a>
+          <a href="#">Automated Rubrics</a>
+          <a href="#">Release Notes</a>
+        </div>
+        <div class="foot-col">
+          <h4>Solutions</h4>
+          <a href="#">HR Compliance</a>
+          <a href="#">Leadership Development</a>
+          <a href="#">Sales Enablement</a>
+          <a href="#">New Hire Onboarding</a>
+        </div>
+        <div class="foot-col">
+          <h4>Integrations</h4>
+          <a href="#">SCORM &amp; xAPI Export</a>
+          <a href="#">Workday</a>
+          <a href="#">Slack App</a>
+          <a href="#">Teams Bot</a>
+        </div>
+        <div class="foot-col">
+          <h4>Security &amp; Legal</h4>
+          <a href="#">Trust Center</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Status Page</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="#">About Lectory</a>
+          <a href="#">Contact Sales</a>
+          <a href="#">Careers</a>
+          <a href="https://app.lectory.dev/login">Sign In</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Lectory, Inc. All rights reserved.</span>
+        <div class="social-row">
+          <a href="#">LinkedIn</a>
+          <a href="#">X</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

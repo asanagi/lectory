@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lectory — Business AI Training & Learning Platform</title>
+  <meta name="description" content="Interactive AI avatar courses, spoken role-play, and rapid no-code course authoring for business workforce training." />
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       THEME 01 TOKENS: ENTERPRISE TRUST (SIMPLIFIED & HIGH-CLARITY)
+       ========================================================================== */
+    :root {
+      --color-navy-950: #090E1A;
+      --color-navy-900: #0F172A;
+      --color-navy-800: #1E293B;
+      --color-navy-700: #334155;
+      
+      --color-primary: #1E3A8A;
+      --color-primary-hover: #172554;
+      --color-primary-light: #EFF6FF;
+      
+      --color-teal: #0D9488;
+      --color-teal-hover: #0F766E;
+      --color-teal-bright: #14B8A6;
+      --color-teal-subtle: #F0FDF4;
+      --color-teal-border: #BBF7D0;
+      
+      --color-bg-base: #FFFFFF;
+      --color-bg-subtle: #F8FAFC;
+      --color-bg-muted: #F1F5F9;
+      
+      --color-text-main: #0F172A;
+      --color-text-body: #475569;
+      --color-text-muted: #64748B;
+      
+      --color-border-light: #E2E8F0;
+      --color-border-medium: #CBD5E1;
+      
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07);
+      --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.06);
+      
+      --container-max: 1240px;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--color-bg-base);
+      color: var(--color-text-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* --------------------------------------------------------------------------
+       HEADER NAVIGATION
+       -------------------------------------------------------------------------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-navy-800);
+    }
+
+    .header-inner {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: #94A3B8;
+      transition: color 0.15s ease;
+    }
+    .nav-link:hover {
+      color: #FFFFFF;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background: #FFFFFF;
+      color: var(--color-navy-900);
+      border-color: var(--color-border-medium);
+    }
+    .btn-secondary:hover {
+      background: var(--color-bg-subtle);
+      border-color: var(--color-text-muted);
+    }
+
+    .btn-teal {
+      background: var(--color-teal);
+      color: #FFFFFF;
+      border-color: var(--color-teal);
+    }
+    .btn-teal:hover {
+      background: var(--color-teal-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #CBD5E1;
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
+
+    .btn-lg {
+      padding: 12px 22px;
+      font-size: 14.5px;
+    }
+
+    /* --------------------------------------------------------------------------
+       HERO SECTION — FULL BLEED RIGHT IMAGE
+       -------------------------------------------------------------------------- */
+    .hero-section {
+      background: linear-gradient(135deg, #F6F8FD 0%, #F1F5FC 45%, #E6EEFA 100%);
+      border-bottom: 1px solid var(--color-border-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Centered responsive container that stays proportional on wide screens */
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
+      min-height: 560px;
+      gap: 40px;
+    }
+
+    /* Fixed/fluid left column: guaranteed readable width and zero crushing */
+    .hero-content {
+      flex: 0 0 480px;
+      width: 480px;
+      padding: 48px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Proportional right visual: scales naturally without zooming or clipping */
+    .hero-visual {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 860px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Image maintains exact aspect ratio with smooth left feather-blend */
+    .hero-img {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      object-fit: contain;
+      object-position: right center;
+      display: block;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 20px, rgba(0, 0, 0, 1) 70px);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 20px, rgba(0, 0, 0, 1) 70px);
+    }
+
+    .hero-title {
+      font-size: 45px;
+      font-weight: 800;
+      color: #090E1A;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      margin-bottom: 16px;
+    }
+
+    .hero-title .highlight-teal {
+      color: var(--color-teal);
+    }
+
+    .hero-tagline {
+      font-size: 18.5px;
+      font-weight: 700;
+      color: #090E1A;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-size: 15.5px;
+      color: var(--color-text-body);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 480px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .hero-trust-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(203, 213, 225, 0.7);
+    }
+
+    .hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-navy-700);
+    }
+
+    /* Hero Preview Card */
+    .hero-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-medium);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--color-navy-900);
+      color: #F8FAFC;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-teal-bright);
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .card-tabs {
+      display: flex;
+      background: var(--color-bg-subtle);
+      border-bottom: 1px solid var(--color-border-light);
+      padding: 4px;
+      gap: 4px;
+    }
+    .card-tab-btn {
+      flex: 1;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      color: var(--color-text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .card-tab-btn.active {
+      background: #FFFFFF;
+      color: var(--color-navy-900);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--color-border-light);
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .dialogue-box {
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .avatar-msg {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: var(--color-navy-900);
+    }
+    .avatar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .avatar-bubble {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-light);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      line-height: 1.45;
+    }
+
+    .user-msg {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .user-bubble {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 90%;
+    }
+
+    .mini-scores {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .score-item {
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border-light);
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+    .score-num {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--color-teal);
+    }
+    .score-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    /* --------------------------------------------------------------------------
+       TRUST STRIP (1 ROW)
+       -------------------------------------------------------------------------- */
+    .trust-strip {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--color-border-light);
+      background: #FFFFFF;
+    }
+    .trust-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-navy-700);
+      opacity: 0.85;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* --------------------------------------------------------------------------
+       3 CORE PILLARS SECTION
+       -------------------------------------------------------------------------- */
+    .pillars-section {
+      padding: 72px 0;
+      background: var(--color-bg-subtle);
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 40px;
+    }
+    .section-tag {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-teal);
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--color-navy-950);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      font-size: 15px;
+      color: var(--color-text-body);
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pillar-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-medium);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .pillar-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .pillar-visual {
+      width: 100%;
+      height: 220px;
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--color-border-light);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pillar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pillar-body {
+      padding: 24px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .pillar-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .pillar-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--color-navy-950);
+      margin-bottom: 8px;
+    }
+
+    .pillar-desc {
+      font-size: 13.5px;
+      color: var(--color-text-body);
+      line-height: 1.55;
+    }
+
+    /* --------------------------------------------------------------------------
+       LEARNING PROGRAMS (4 SOLUTIONS)
+       -------------------------------------------------------------------------- */
+    .programs-section {
+      padding: 72px 0;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .program-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-medium);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .prog-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+    .prog-badge-hr { background: #FEF3C7; color: #92400E; }
+    .prog-badge-ldr { background: #E0F2FE; color: #0369A1; }
+    .prog-badge-sls { background: #DCFCE7; color: #166534; }
+    .prog-badge-onb { background: #F3E8FF; color: #6B21A8; }
+
+    .prog-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-navy-950);
+      margin-bottom: 6px;
+    }
+
+    .prog-desc {
+      font-size: 13px;
+      color: var(--color-text-body);
+      line-height: 1.45;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+
+    /* --------------------------------------------------------------------------
+       BOTTOM CTA & FOOTER
+       -------------------------------------------------------------------------- */
+    .cta-strip {
+      background: var(--color-navy-950);
+      color: #FFFFFF;
+      padding: 56px 0;
+      text-align: center;
+    }
+
+    .cta-heading {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .cta-desc {
+      font-size: 15px;
+      color: #94A3B8;
+      margin-bottom: 24px;
+    }
+
+    .site-footer {
+      background: var(--color-navy-950);
+      color: #94A3B8;
+      padding: 64px 0 32px;
+      font-size: 13.5px;
+      border-top: 1px solid var(--color-navy-800);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.2fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    }
+
+    .footer-brand-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-tagline {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #94A3B8;
+      max-width: 320px;
+    }
+
+    .footer-trust-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .footer-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      margin-bottom: 18px;
+    }
+
+    .footer-col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col-links a {
+      color: #94A3B8;
+      transition: color 0.15s ease;
+      font-size: 13px;
+    }
+
+    .footer-col-links a:hover {
+      color: #38BDF8;
+    }
+
+    .footer-bottom {
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12.5px;
+      color: #64748B;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      color: #94A3B8;
+      transition: color 0.15s;
+    }
+    .footer-bottom-links a:hover {
+      color: #FFFFFF;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-inner {
+        flex-direction: column;
+        padding: 40px 24px;
+        gap: 32px;
+      }
+      .hero-content {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+      }
+      .hero-visual {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        min-height: auto;
+      }
+      .pillars-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+      }
+      .footer-brand-col {
+        grid-column: 1 / -1;
+      }
+    }
+    @media (max-width: 600px) {
+      .nav-menu { display: none; }
+      .hero-title { font-size: 28px; }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo-link" title="Lectory Home">
+        <!-- Embedded Lectory Vector Wordmark (Option 1: Knockout White & Cobalt/Teal) -->
+        <svg height="34" viewBox="215 235 1160 305" style="width: auto; max-height: 34px; display: block;">
+          <g transform="translate(-65, 0)">
+            <path fill="#14B8A6" d="M336.111 284.692C344.639 252.922 368.366 238.32 400.434 238.373L400.42 351.537C400.421 365.362 399.566 394.262 400.638 407.008L401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C468.919 486.787 463.467 501.113 450.747 512.841C437.271 525.268 420.74 529.931 402.713 529.772C375.229 529.531 347.691 529.908 320.21 529.634C310.082 529.533 298.86 526.016 292.139 518.207C282.431 507.269 283.235 495.638 283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692Z"/>
+            <path fill="#0284C7" d="M336.111 284.692C344.639 252.922 368.366 238.32 400.434 238.373L400.42 351.537C400.421 365.362 399.566 394.262 400.638 407.008C381.472 407.507 359.81 403.569 346.145 418.478C340.075 425.101 336.736 432.644 335.296 441.416L335.195 455.254C319.925 455.119 306.572 453.458 294.52 464.751C286.924 471.867 286.783 477.293 283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692Z"/>
+            <path fill="#3B82F6" d="M283.347 482.151L282.867 380.326C282.847 365.387 282.67 350.512 283.112 335.578C284.008 305.306 307.475 287.056 336.111 284.692C334.627 295.692 335.301 319.81 335.325 331.662L335.315 405.764C335.3 416.578 335.721 430.839 335.296 441.416L335.195 455.254C319.925 455.119 306.572 453.458 294.52 464.751C286.924 471.867 286.783 477.293 283.347 482.151Z"/>
+            <path fill="#3B82F6" d="M401.033 407.279L505.46 407.277C505.756 438.536 500.488 456.663 469.645 469.798C461.171 471.906 456.552 472.494 447.804 472.385C439.179 471.281 410.145 471.811 400.492 471.761L400.39 429.416C400.384 424.976 400.091 410.962 401.033 407.279Z"/>
+            <path fill="#0EA5E9" d="M400.638 407.008L401.033 407.279C400.091 410.962 400.384 424.976 400.39 429.416L400.492 471.761C410.145 471.811 439.179 471.281 447.804 472.385C445.336 472.618 442.932 472.644 440.458 472.628C405.363 472.396 370.321 471.931 335.222 472.029L335.195 455.254L335.296 441.416C336.736 432.644 340.075 425.101 346.145 418.478C359.81 403.569 381.472 407.507 400.638 407.008Z"/>
+          </g>
+          <g transform="translate(-235, -108) scale(1.28)">
+            <path fill="#FFFFFF" d="M569.104 297.065L593.348 297.054L593.285 381.586C593.268 396.387 593.117 411.2 593.406 425.995C593.646 438.34 604.428 437.066 613.269 436.324C614.285 440.052 619.247 455.568 617.787 457.992C597.514 463.533 570.703 458.358 569.758 434.005C568.01 388.95 569.023 342.121 569.104 297.065Z"/>
+            <path fill="#FFFFFF" d="M668.741 341.526C669.453 341.467 670.167 341.442 670.881 341.451C701.574 341.817 723.41 360.701 728.775 391.028C729.931 397.561 729.809 403.376 729.74 409.999L639.711 409.756C640.465 411.995 641.167 414.278 642.039 416.465C651.569 440.369 682.053 443.052 701.533 430.32C704.247 428.546 706.51 426.461 708.878 424.315C714.651 428.615 720.58 432.7 726.653 436.564C714.375 451.135 703.234 457.562 683.924 460.068C667.222 462.236 649.765 457.931 636.498 447.221C624.749 437.595 617.311 423.691 615.826 408.574C612.422 375.121 634.719 344.971 668.741 341.526Z"/>
+            <path fill="#0F172A" d="M673.373 364.056C692.204 364.724 699.98 373.135 705.739 389.989C695.221 390.182 684.44 390.101 673.899 390.136L640.003 390.178C646.51 373.099 654.841 365.458 673.373 364.056Z"/>
+            <path fill="#FFFFFF" d="M790.759 342.983C815.603 339.738 831.421 348.883 847.354 366.581C839.691 371.048 834.842 374.473 827.764 379.663C826.874 378.655 825.963 377.665 825.033 376.694C812.364 363.528 785.984 361.108 773.938 375.084C742.296 411.798 790.928 462.073 826.756 423.604L827.332 423.016C830.468 423.188 843.645 432.76 847.157 435.18C846.551 436.074 845.929 436.957 845.292 437.829C836.442 449.768 823.199 457.688 808.494 459.836C792.196 462.408 775.544 458.409 762.191 448.716C749.857 439.534 741.676 425.826 739.452 410.61C734.288 374.859 755.383 348.071 790.759 342.983Z"/>
+            <path fill="#FFFFFF" d="M867.745 312.063L892.719 312.138C893.013 322.537 893.158 332.939 893.154 343.341L923.779 343.386L923.81 365.289L893.229 365.318C893.184 382.183 893.26 399.24 893.185 416.089C893.09 437.384 901.507 442.17 921.26 434.458L925.816 446.635L927.597 453.086C905.497 468.016 872.607 460.422 868.903 432.745C866.262 413.013 867.759 386.496 867.758 366.183C862.248 366.006 856.415 366.338 850.878 366.561C851.475 359.613 851.305 350.475 851.363 343.352L867.703 343.289L867.745 312.063Z"/>
+            <path fill="#FFFFFF" d="M983.148 342.267C1016.04 339.953 1044.55 364.792 1046.77 397.689C1048.99 430.585 1024.07 459.029 991.167 461.153C958.398 463.268 930.096 438.47 927.886 405.708C925.676 372.945 950.392 344.571 983.148 342.267Z"/>
+            <path fill="#0F172A" d="M985.986 366.528C1005.36 365.721 1021.71 380.777 1022.5 400.147C1023.29 419.517 1008.22 435.856 988.848 436.63C969.5 437.404 953.185 422.355 952.395 403.009C951.605 383.662 966.64 367.334 985.986 366.528Z"/>
+            <path fill="#FFFFFF" d="M1112.73 342.989C1114.96 342.825 1117.2 342.706 1119.44 342.631C1130.1 342.364 1125.71 361.683 1125.6 369.991C1089.48 364.097 1086.39 386.929 1086.66 416.032C1086.8 430.294 1086.69 445.192 1086.73 459.512C1078.78 459.378 1070.06 459.612 1062.06 459.686C1061.14 421.935 1062.14 381.709 1061.72 343.467L1086.04 343.671L1086.1 360.233C1093.64 348.78 1099.14 344.761 1112.73 342.989Z"/>
+            <path fill="#FFFFFF" d="M1129.74 343.48C1138.84 343.673 1148.39 343.553 1157.53 343.571L1188.99 430.02C1200.98 401.397 1212.73 371.843 1225.52 343.631L1253.44 343.543C1240.38 370.413 1227.69 401.794 1215.57 429.502C1207.54 448.138 1199.13 471.413 1188.16 488.033C1176.27 506.046 1148.64 503.486 1131.24 496.82C1131.68 490.271 1133.34 481.232 1134.38 474.567C1157.24 482.907 1165.89 479.834 1176.83 458.466C1171.63 443.879 1164.68 428.692 1158.71 414.309L1129.74 343.48Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#platform" class="nav-link">Platform</a></li>
+          <li><a href="#pricing" class="nav-link">Get Started</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="btn btn-ghost">Sign In</a>
+        <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=nav_demo" class="btn btn-primary">Book a Demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-inner">
+
+      <!-- Left Hero Content -->
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Practice Real<br>Workplace<br>Conversations<br><span class="highlight-teal">with AI</span>
+        </h1>
+        <p class="hero-tagline">AI Role-Play Training That Talks Back.</p>
+        <p class="hero-subtitle">
+          Practice difficult workplace conversations with AI avatars that listen, respond, and adapt in real time. Turn policies and manager guides into interactive role-play scenarios—and measure how employees actually respond.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="https://app.lectory.dev/try?utm_source=marketing&utm_medium=home_hero" class="btn btn-teal btn-lg">
+            Try an AI Role-Play &rsaquo;
+          </a>
+          <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=home_hero" class="btn btn-secondary btn-lg">
+            Schedule a Demo
+          </a>
+        </div>
+
+        <div class="hero-trust-bar">
+          <div class="hero-trust-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Enterprise Secure
+          </div>
+          <div class="hero-trust-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Proven Outcomes
+          </div>
+          <div class="hero-trust-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Loved by HR Teams
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Hero Visual — full bleed, flush top & right edge -->
+      <div class="hero-visual">
+        <img src="images/hero_illustration.png" alt="Lectory AI Avatar Workplace Role-Play Platform" class="hero-img" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3 Core Pillars Section (Everything in 3 Clean Cards) -->
+  <section class="pillars-section" id="platform">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">How Lectory Works</span>
+        <h2 class="section-title">The Complete Workforce Learning Platform</h2>
+        <p class="section-sub">
+          Everything L&D and People Operations teams need to author, dispatch, and evaluate conversational business training.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        
+        <!-- Pillar 1 -->
+        <div class="pillar-card">
+          <div class="pillar-visual">
+            <img src="images/pillar_roleplay.png" alt="Spoken Avatar Role-Play" class="pillar-img" />
+          </div>
+          <div class="pillar-body">
+            <div class="pillar-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <h3 class="pillar-heading">1. Spoken Avatar Role-Play</h3>
+            <p class="pillar-desc">
+              Employees practice difficult real-world conversations in natural spoken dialogue. Emotionally responsive 3D avatars adapt dynamically to employee tone and decisions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="pillar-card">
+          <div class="pillar-visual">
+            <img src="images/pillar_studio.png" alt="No-Code Course Studio" class="pillar-img" />
+          </div>
+          <div class="pillar-body">
+            <div class="pillar-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <h3 class="pillar-heading">2. No-Code Course Studio</h3>
+            <p class="pillar-desc">
+              Upload company handbooks, compliance SOPs, or sales playbooks. The AI wizard generates interactive branching courses in minutes without video production delays.
+            </p>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="pillar-card">
+          <div class="pillar-visual">
+            <img src="images/pillar_interface.png" alt="Intuitive Modern Interface" class="pillar-img" />
+          </div>
+          <div class="pillar-body">
+            <div class="pillar-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <h3 class="pillar-heading">3. Intuitive Modern Interface</h3>
+            <p class="pillar-desc">
+              Manage business training through a sleek, consumer-grade workspace designed for modern People Ops. No bloated menus or dated LMS workflows—just clean, visual controls to organize scenarios, assign cohorts, and review team progress in seconds.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Clean Bottom CTA Strip -->
+  <section class="cta-strip" id="pricing">
+    <div class="container">
+      <h2 class="cta-heading">Ready to Modernize Business Training?</h2>
+      <p class="cta-desc">Experience an interactive AI avatar class or book a business demo with our learning architects.</p>
+      <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+        <a href="https://app.lectory.dev/try?utm_source=marketing&utm_medium=home_footer" class="btn btn-teal btn-lg">
+          Explore a Live Class
+        </a>
+        <a href="https://app.lectory.dev/demo?utm_source=marketing&utm_medium=home_footer" class="btn btn-secondary btn-lg" style="background:transparent; color:#FFF; border-color:#334155;">
+          Schedule Business Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enterprise Multi-Column Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Brand & Mission Column -->
+        <div class="footer-brand-col">
+          <div class="footer-brand-title">Lectory</div>
+          <p class="footer-tagline">
+            The Business AI Training &amp; Learning Platform. Turn company guidelines into interactive, voice-driven AI avatar role-plays that build real-world employee confidence.
+          </p>
+        </div>
+
+        <!-- Col 1: Product & Tech -->
+        <div>
+          <h4 class="footer-col-title">Product &amp; Tech</h4>
+          <ul class="footer-col-links">
+            <li><a href="#platform">Avatar Role-Play</a></li>
+            <li><a href="#platform">Course Studio</a></li>
+            <li><a href="#platform">Admin Workspace</a></li>
+            <li><a href="https://app.lectory.dev/try?utm_source=marketing&utm_medium=footer_try">Live Simulations</a></li>
+            <li><a href="https://app.lectory.dev/signup?intent=studio_trial&utm_source=marketing">AI Authoring Trial</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2: Solutions -->
+        <div>
+          <h4 class="footer-col-title">Solutions</h4>
+          <ul class="footer-col-links">
+            <li><a href="https://app.lectory.dev/try?track=compliance&utm_source=marketing">HR &amp; Compliance</a></li>
+            <li><a href="https://app.lectory.dev/try?track=leadership&utm_source=marketing">Manager 1-on-1s</a></li>
+            <li><a href="https://app.lectory.dev/try?track=sales&utm_source=marketing">Sales Enablement</a></li>
+            <li><a href="https://app.lectory.dev/try?track=onboarding&utm_source=marketing">New Hire Onboarding</a></li>
+            <li><a href="https://app.lectory.dev/demo?utm_source=marketing">Custom Scenarios</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Integrations & Security -->
+        <div>
+          <h4 class="footer-col-title">Integrations &amp; Trust</h4>
+          <ul class="footer-col-links">
+            <li><a href="https://app.lectory.dev/demo?interest=scorm&utm_source=marketing">SCORM &amp; xAPI Export</a></li>
+            <li><a href="https://app.lectory.dev/demo?interest=slack&utm_source=marketing">Slack &amp; Teams Dispatch</a></li>
+            <li><a href="https://app.lectory.dev/demo?interest=lms&utm_source=marketing">Workday &amp; LMS Sync</a></li>
+            <li><a href="https://app.lectory.dev/demo?interest=security&utm_source=marketing">Security &amp; Trust Center</a></li>
+            <li><a href="https://app.lectory.dev/demo?interest=privacy&utm_source=marketing">Zero AI Data Retention</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Company & Access -->
+        <div>
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-col-links">
+            <li><a href="https://app.lectory.dev/demo?utm_source=marketing">Contact Sales</a></li>
+            <li><a href="https://app.lectory.dev/login?utm_source=marketing">Admin Sign In</a></li>
+            <li><a href="https://app.lectory.dev/signup?utm_source=marketing">Get Started</a></li>
+            <li><a href="https://app.lectory.dev/demo?utm_source=marketing">Book a Demo</a></li>
+            <li><a href="mailto:support@lectory.dev">Support</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Sub-bar -->
+      <div class="footer-bottom">
+        <div>&copy; 2026 Lectory Inc. All rights reserved. Built for modern business learning.</div>
+        <ul class="footer-bottom-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Security &amp; Compliance</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="https://app.lectory.dev/login">App Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Scenario Switcher Script -->
+  <script>
+    const scenarios = {
+      compliance: {
+        avatar: '"I noticed my team lead made an inappropriate comment during standup. I wasn\'t sure if HR would protect me from retaliation."',
+        user: '"Thank you for trusting me with this. Our policy guarantees strict non-retaliation, and we\'ll document everything confidentially."',
+        score1: '98%',
+        score2: '94%',
+        score3: '100%',
+        url: 'https://app.lectory.dev/try?track=compliance&utm_source=marketing&utm_medium=home_preview'
+      },
+      leadership: {
+        avatar: '"I feel like the expectations for my promotion were moved without notice, and I\'m overwhelmed by the new sprint goals."',
+        user: '"I hear your frustration. Let\'s step through the rubric criteria together and align on achievable milestones for this quarter."',
+        score1: '96%',
+        score2: '97%',
+        score3: '92%',
+        url: 'https://app.lectory.dev/try?track=leadership&utm_source=marketing&utm_medium=home_preview'
+      },
+      sales: {
+        avatar: '"We already have standard training modules. Why should our enablement team add avatar role-plays for sales reps?"',
+        user: '"Lectory gives reps safe voice-to-voice practice against real customer objections with automated scoring, so they master pitches before customer calls."',
+        score1: '95%',
+        score2: '91%',
+        score3: '98%',
+        url: 'https://app.lectory.dev/try?track=sales&utm_source=marketing&utm_medium=home_preview'
+      }
+    };
+
+    function switchScenario(trackKey) {
+      const data = scenarios[trackKey];
+      if (!data) return;
+
+      document.getElementById('avatar-line').innerText = data.avatar;
+      document.getElementById('user-line').innerText = data.user;
+      document.getElementById('score-1').innerText = data.score1;
+      document.getElementById('score-2').innerText = data.score2;
+      document.getElementById('score-3').innerText = data.score3;
+      document.getElementById('sim-launch-cta').href = data.url;
+
+      const buttons = document.querySelectorAll('.card-tab-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.toLowerCase().includes(trackKey.substring(0, 4))) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

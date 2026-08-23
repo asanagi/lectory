@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lectory — Design Theme Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#080B10;
+    --page-bg-alt:#0C0F16;
+    --page-border:#1B212C;
+    --page-text:#E7EAF0;
+    --page-text-dim:#8890A0;
+    --page-text-faint:#5B6273;
+    --page-accent:#14B8A6;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:auto;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--page-bg);
+    color:var(--page-text);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:64px;
+  }
+
+  /* ============ PAGE CHROME ============ */
+  .page-head{
+    max-width:1360px;
+    margin:0 auto;
+    padding:56px 32px 28px;
+    border-bottom:1px solid var(--page-border);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--page-accent);
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:6px;height:6px;border-radius:50%;
+    background:var(--page-accent);
+    box-shadow:0 0 0 3px rgba(20,184,166,0.18);
+  }
+  .page-head h1{
+    font-size:clamp(28px,3.4vw,40px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    max-width:820px;
+    margin-bottom:16px;
+  }
+  .page-head .lede{
+    font-size:15.5px;
+    color:var(--page-text-dim);
+    max-width:760px;
+    line-height:1.65;
+    margin-bottom:22px;
+  }
+  .source-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .source-chip{
+    font-size:12px;
+    font-weight:500;
+    color:var(--page-text-dim);
+    background:var(--page-bg-alt);
+    border:1px solid var(--page-border);
+    padding:6px 11px;
+    border-radius:6px;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.01em;
+  }
+
+  /* ============ AT-A-GLANCE STRIP ============ */
+  .glance{
+    max-width:1360px;
+    margin:0 auto;
+    padding:28px 32px 8px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .glance-item{
+    background:var(--page-bg-alt);
+    border:1px solid var(--page-border);
+    border-radius:10px;
+    padding:16px 18px;
+  }
+  .glance-item .g-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--page-text-faint);
+    letter-spacing:0.08em;
+    margin-bottom:6px;
+  }
+  .glance-item h3{
+    font-size:15.5px;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .glance-item p{
+    font-size:12.8px;
+    color:var(--page-text-dim);
+    line-height:1.55;
+  }
+
+  /* ============ THEME GRID ============ */
+  .themes-grid{
+    max-width:1360px;
+    margin:0 auto;
+    padding:24px 32px 40px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    align-items:start;
+  }
+  @media (max-width:1180px){
+    .themes-grid{grid-template-columns:1fr; max-width:640px;}
+    .glance{grid-template-columns:1fr; max-width:640px;}
+  }
+
+  .theme-card{
+    border-radius:14px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 8px 30px rgba(0,0,0,0.35);
+    border:1px solid var(--page-border);
+  }
+
+  .card-head{
+    padding:22px 22px 20px;
+  }
+  .num-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border-radius:5px;
+    margin-bottom:12px;
+  }
+  .card-name{
+    font-size:21px;
+    font-weight:700;
+    margin-bottom:7px;
+    letter-spacing:-0.01em;
+  }
+  .card-pitch{
+    font-size:13px;
+    line-height:1.58;
+    margin-bottom:14px;
+  }
+  .tag-row{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{
+    font-size:11px;
+    font-weight:600;
+    padding:4px 9px;
+    border-radius:5px;
+  }
+
+  .card-body{
+    padding:6px 22px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+
+  .sec-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    margin-bottom:11px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .sec-hint{ font-weight:400; text-transform:none; letter-spacing:0; font-size:10.5px; opacity:0.7;}
+
+  /* Swatches */
+  .swatches{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:7px;
+  }
+  .swatch{
+    border-radius:7px;
+    overflow:hidden;
+    cursor:pointer;
+    border:1px solid rgba(0,0,0,0.08);
+    position:relative;
+    background:none;
+    text-align:left;
+    font:inherit;
+  }
+  .swatch .chip{ height:42px; width:100%; }
+  .swatch .meta{ padding:5px 7px; }
+  .swatch .s-name{ font-size:9.8px; font-weight:700; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .swatch .s-hex{ font-family:'JetBrains Mono',monospace; font-size:9px; opacity:0.75; }
+  .swatch .copied-flag{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; opacity:0; transition:opacity .15s ease; pointer-events:none;
+  }
+  .swatch.copied .copied-flag{ opacity:1; }
+  .swatch.copied .chip{ filter:brightness(0.85); }
+
+  /* Type scale */
+  .type-block{ border-radius:10px; padding:15px 16px; display:flex; flex-direction:column; gap:11px; }
+  .type-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding-bottom:10px; border-bottom:1px solid; }
+  .type-row:last-child{ border-bottom:none; padding-bottom:0; }
+  .type-sample{ flex-shrink:1; min-width:0; }
+  .type-tag{ font-family:'JetBrains Mono',monospace; font-size:9.5px; white-space:nowrap; text-align:right; opacity:0.7; }
+
+  /* Buttons */
+  .btn-demo{ display:flex; flex-direction:column; gap:9px; }
+  .btn-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:9px 14px;
+    cursor:pointer;
+    border:1px solid transparent;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+    transition:background .15s ease, border-color .15s ease, color .15s ease, transform .08s ease, box-shadow .15s ease;
+    width:100%;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn:disabled{ cursor:not-allowed; }
+  .btn:focus-visible{ outline:none; }
+
+  /* Hero mockup */
+  .hero-mock{
+    border-radius:11px;
+    overflow:hidden;
+    border:1px solid;
+    padding:20px 18px 18px;
+    position:relative;
+  }
+  .hero-badge-bar{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9.5px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    padding:5px 10px;
+    border-radius:99px;
+    margin-bottom:14px;
+  }
+  .hero-headline{
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin-bottom:9px;
+    max-width:88%;
+  }
+  .hero-sub{
+    font-size:12px;
+    line-height:1.55;
+    max-width:90%;
+    margin-bottom:16px;
+  }
+  .hero-cta-row{ display:flex; gap:8px; margin-bottom:18px; }
+  .hero-cta-row .btn{ width:auto; padding:8px 14px; font-size:12px; }
+  .orb{
+    position:absolute;
+    right:14px;
+    bottom:14px;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .orb::before{
+    content:"";
+    width:22px;height:22px;border-radius:50%;
+  }
+  .orb .ring{
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    border:1px solid;
+    opacity:0.5;
+  }
+
+  /* footer */
+  .page-foot{
+    max-width:1360px;
+    margin:0 auto;
+    padding:36px 32px 0;
+    border-top:1px solid var(--page-border);
+    margin-top:12px;
+    padding-top:28px;
+  }
+  .page-foot h2{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .page-foot p{
+    font-size:13.5px;
+    color:var(--page-text-dim);
+    line-height:1.7;
+    max-width:900px;
+    margin-bottom:10px;
+  }
+  .page-foot p:last-child{ margin-bottom:0; }
+  .page-foot strong{ color:var(--page-text); font-weight:600; }
+
+  /* =====================================================================
+     THEME 1 — "EXECUTIVE TRUST"
+     Light, navy-dominant, institutional. Built for the CLO / VP HR buyer
+     and IT & Security evaluators who need a procurement-safe, low-risk
+     surface. Teal is used sparingly, as a signal color rather than a
+     decoration. Serif display type borrows editorial gravitas from
+     analyst reports without tipping into "consumer" territory.
+     ===================================================================== */
+  .theme-1{
+    --navy-900:#0B1220;
+    --navy-800:#16213D;
+    --navy-700:#1E3A8A;
+    --navy-600:#2748A8;
+    --navy-50:#EEF2FB;
+    --teal-600:#0E7490;
+    --teal-500:#14B8A6;
+    --teal-50:#EAFBF8;
+    --surface:#FFFFFF;
+    --surface-alt:#F7F8FA;
+    --border:#E1E5EC;
+    --text-1:#0F172A;
+    --text-2:#4B5567;
+    --text-3:#8992A3;
+    background:var(--surface);
+    color:var(--text-1);
+  }
+  .theme-1 .card-head{ background:var(--surface-alt); border-bottom:1px solid var(--border); }
+  .theme-1 .num-badge{ background:var(--navy-50); color:var(--navy-700); border:1px solid #C9D6F2; }
+  .theme-1 .card-name{ font-family:'Source Serif 4',serif; color:var(--navy-900); }
+  .theme-1 .card-pitch{ color:var(--text-2); }
+  .theme-1 .tag{ background:#F1F3F6; color:var(--text-2); border:1px solid var(--border); }
+  .theme-1 .sec-label{ color:var(--text-3); }
+  .theme-1 .swatch{ border-color:var(--border); }
+  .theme-1 .swatch .meta{ background:var(--surface-alt); }
+  .theme-1 .swatch .s-name{ color:var(--text-1); }
+  .theme-1 .swatch .s-hex{ color:var(--text-3); }
+  .theme-1 .swatch .copied-flag{ background:rgba(255,255,255,0.85); color:var(--navy-700); }
+  .theme-1 .type-block{ background:var(--surface-alt); border:1px solid var(--border); }
+  .theme-1 .type-row{ border-color:var(--border); }
+  .theme-1 .type-tag{ color:var(--text-3); }
+  .theme-1 .t-display{ font-family:'Source Serif 4',serif; font-size:26px; font-weight:700; color:var(--navy-900); line-height:1.15; }
+  .theme-1 .t-h2{ font-family:'Source Serif 4',serif; font-size:19px; font-weight:600; color:var(--navy-900); }
+  .theme-1 .t-h3{ font-size:15px; font-weight:700; color:var(--text-1); }
+  .theme-1 .t-body{ font-size:13.5px; color:var(--text-2); }
+  .theme-1 .t-caption{ font-size:11.5px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--teal-600); }
+  .theme-1 .t-mono{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-2); }
+
+  .theme-1 .t1-btn-primary{ background:var(--navy-700); color:#fff; border-radius:6px; border-color:var(--navy-700); box-shadow:0 1px 2px rgba(15,23,42,0.12);}
+  .theme-1 .t1-btn-primary:hover{ background:var(--navy-800); border-color:var(--navy-800); }
+  .theme-1 .t1-btn-primary:active{ background:var(--navy-900); }
+  .theme-1 .t1-btn-primary:focus-visible{ box-shadow:0 0 0 3px rgba(30,58,138,0.28); }
+
+  .theme-1 .t1-btn-secondary{ background:var(--surface); color:var(--navy-700); border-radius:6px; border-color:#C7D2E8; }
+  .theme-1 .t1-btn-secondary:hover{ background:var(--navy-50); border-color:var(--navy-700); }
+  .theme-1 .t1-btn-secondary:active{ background:#E2E9F8; }
+  .theme-1 .t1-btn-secondary:focus-visible{ box-shadow:0 0 0 3px rgba(30,58,138,0.18); }
+
+  .theme-1 .t1-btn-ghost{ background:transparent; color:var(--teal-600); border-radius:6px; }
+  .theme-1 .t1-btn-ghost:hover{ background:var(--teal-50); color:var(--teal-600); }
+  .theme-1 .t1-btn-ghost:active{ background:#D5F5F0; }
+
+  .theme-1 .t1-btn-disabled{ background:var(--surface-alt); color:var(--text-3); border-radius:6px; border-color:var(--border); }
+
+  .theme-1 .hero-mock{ background:linear-gradient(180deg,#0B1220 0%, #16213D 100%); border-color:var(--navy-900); }
+  .theme-1 .hero-badge-bar{ background:rgba(20,184,166,0.14); color:#5EEAD4; border:1px solid rgba(20,184,166,0.3); }
+  .theme-1 .hero-headline{ font-family:'Source Serif 4',serif; font-size:19px; color:#FBFCFE; }
+  .theme-1 .hero-sub{ color:#B7C0D6; }
+  .theme-1 .orb{ background:radial-gradient(circle at 35% 30%, #2748A8, #0B1220); }
+  .theme-1 .orb::before{ background:var(--teal-500); }
+  .theme-1 .orb .ring{ border-color:rgba(20,184,166,0.4); }
+
+  /* =====================================================================
+     THEME 2 — "RUNTIME SIGNAL"
+     Dark-mode-forward, technical, built to sell the real-time engine
+     itself (Wedge 1 & 2) to instructional designers and IT evaluators
+     comparing Lectory's client-side WebGL/TTS runtime against legacy
+     pre-rendered pipelines. Teal reads as a "live" status color; mono
+     type surfaces JSON/state-graph language from the architecture docs.
+     ===================================================================== */
+  .theme-2{
+    --bg-950:#070A11;
+    --bg-900:#0C121F;
+    --bg-800:#141C2E;
+    --bg-700:#1D2740;
+    --border-2:#232E48;
+    --navy-mid:#3555B0;
+    --teal-500:#14B8A6;
+    --teal-400:#2DD4C4;
+    --teal-300:#5EEAD4;
+    --teal-900:#04302B;
+    --text-1:#F1F5F9;
+    --text-2:#94A3B8;
+    --text-3:#5C6B85;
+    background:var(--bg-900);
+    color:var(--text-1);
+  }
+  .theme-2 .card-head{ background:var(--bg-950); border-bottom:1px solid var(--border-2); }
+  .theme-2 .num-badge{ background:var(--teal-900); color:var(--teal-300); border:1px solid rgba(45,212,196,0.35); }
+  .theme-2 .card-name{ font-family:'Space Grotesk',sans-serif; }
+  .theme-2 .card-pitch{ color:var(--text-2); }
+  .theme-2 .tag{ background:var(--bg-800); color:var(--text-2); border:1px solid var(--border-2); font-family:'JetBrains Mono',monospace; font-weight:500; }
+  .theme-2 .sec-label{ color:var(--text-3); }
+  .theme-2 .swatch{ border-color:var(--border-2); }
+  .theme-2 .swatch .meta{ background:var(--bg-800); }
+  .theme-2 .swatch .s-name{ color:var(--text-1); }
+  .theme-2 .swatch .s-hex{ color:var(--text-3); }
+  .theme-2 .swatch .copied-flag{ background:rgba(7,10,17,0.9); color:var(--teal-300); }
+  .theme-2 .type-block{ background:var(--bg-950); border:1px solid var(--border-2); }
+  .theme-2 .type-row{ border-color:var(--border-2); }
+  .theme-2 .type-tag{ color:var(--text-3); }
+  .theme-2 .t-display{ font-family:'Space Grotesk',sans-serif; font-size:25px; font-weight:700; color:var(--text-1); line-height:1.15; letter-spacing:-0.01em; }
+  .theme-2 .t-h2{ font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:600; color:var(--text-1); }
+  .theme-2 .t-h3{ font-size:14.5px; font-weight:700; color:var(--text-1); }
+  .theme-2 .t-body{ font-size:13.5px; color:var(--text-2); }
+  .theme-2 .t-caption{ font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--teal-400); }
+  .theme-2 .t-mono{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal-300); }
+
+  .theme-2 .t2-btn-primary{ background:var(--teal-500); color:#04140F; border-radius:8px; border-color:var(--teal-500); font-weight:700; }
+  .theme-2 .t2-btn-primary:hover{ background:var(--teal-400); border-color:var(--teal-400); box-shadow:0 0 0 4px rgba(20,184,166,0.15); }
+  .theme-2 .t2-btn-primary:active{ background:#0D9488; }
+  .theme-2 .t2-btn-primary:focus-visible{ box-shadow:0 0 0 3px rgba(45,212,196,0.4); }
+
+  .theme-2 .t2-btn-secondary{ background:var(--bg-800); color:var(--text-1); border-radius:8px; border-color:var(--border-2); }
+  .theme-2 .t2-btn-secondary:hover{ background:var(--bg-700); border-color:#33456B; }
+  .theme-2 .t2-btn-secondary:active{ background:#0F1626; }
+
+  .theme-2 .t2-btn-ghost{ background:transparent; color:var(--text-2); border-radius:8px; }
+  .theme-2 .t2-btn-ghost:hover{ background:var(--bg-800); color:var(--text-1); }
+
+  .theme-2 .t2-btn-disabled{ background:var(--bg-950); color:var(--text-3); border-radius:8px; border-color:var(--border-2); }
+
+  .theme-2 .hero-mock{ background:radial-gradient(120% 140% at 100% 0%, #142236 0%, #070A11 60%); border-color:var(--border-2); }
+  .theme-2 .hero-badge-bar{ background:var(--teal-900); color:var(--teal-300); border:1px solid rgba(45,212,196,0.3); }
+  .theme-2 .hero-badge-bar .live-dot{ width:5px; height:5px; border-radius:50%; background:var(--teal-400); animation:pulse-dot 2.2s ease-in-out infinite; }
+  .theme-2 .hero-headline{ font-family:'Space Grotesk',sans-serif; font-size:18px; color:var(--text-1); }
+  .theme-2 .hero-sub{ color:var(--text-2); }
+  .theme-2 .orb{ background:radial-gradient(circle at 35% 30%, #1D2740, #070A11); }
+  .theme-2 .orb::before{ background:var(--teal-400); box-shadow:0 0 14px rgba(45,212,196,0.55); }
+  .theme-2 .orb .ring{ border-color:rgba(45,212,196,0.5); animation:pulse-ring 2.4s ease-out infinite; }
+
+  @keyframes pulse-dot{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+  @keyframes pulse-ring{ 0%{ transform:scale(0.9); opacity:0.6; } 100%{ transform:scale(1.25); opacity:0; } }
+
+  /* =====================================================================
+     THEME 3 — "PRACTICE STUDIO"
+     Warm-neutral light theme for the human moment inside an enterprise
+     tool: manager 1:1 rehearsal, compliance role-play, onboarding.
+     Softer geometry and a warmer canvas signal "safe to practice here"
+     to the corporate learner, while navy/teal and restrained type keep
+     it credible to the L&D buyer reviewing it alongside Theme 1.
+     ===================================================================== */
+  .theme-3{
+    --canvas:#FAF8F3;
+    --surface:#FFFFFF;
+    --surface-alt:#F3EFE6;
+    --border-3:#E9E2D3;
+    --navy-900:#172554;
+    --navy-700:#1E3A8A;
+    --navy-500:#3B5BC4;
+    --teal-500:#14B8A6;
+    --teal-100:#CFF7F0;
+    --teal-700:#0F766E;
+    --text-1:#211F2B;
+    --text-2:#5B5A66;
+    --text-3:#918F9C;
+    background:var(--canvas);
+    color:var(--text-1);
+  }
+  .theme-3 .card-head{ background:var(--surface); border-bottom:1px solid var(--border-3); }
+  .theme-3 .num-badge{ background:var(--teal-100); color:var(--teal-700); border:1px solid #AEEAE0; }
+  .theme-3 .card-name{ font-family:'Plus Jakarta Sans',sans-serif; color:var(--navy-900); }
+  .theme-3 .card-pitch{ color:var(--text-2); }
+  .theme-3 .tag{ background:var(--surface-alt); color:var(--text-2); border:1px solid var(--border-3); border-radius:99px; }
+  .theme-3 .sec-label{ color:var(--text-3); }
+  .theme-3 .swatch{ border-color:var(--border-3); border-radius:11px; }
+  .theme-3 .swatch .meta{ background:var(--surface); }
+  .theme-3 .swatch .s-name{ color:var(--text-1); }
+  .theme-3 .swatch .s-hex{ color:var(--text-3); }
+  .theme-3 .swatch .copied-flag{ background:rgba(255,255,255,0.9); color:var(--navy-700); }
+  .theme-3 .type-block{ background:var(--surface); border:1px solid var(--border-3); border-radius:14px; }
+  .theme-3 .type-row{ border-color:var(--border-3); }
+  .theme-3 .type-tag{ color:var(--text-3); }
+  .theme-3 .t-display{ font-family:'Plus Jakarta Sans',sans-serif; font-size:25px; font-weight:800; color:var(--navy-900); line-height:1.18; letter-spacing:-0.01em; }
+  .theme-3 .t-h2{ font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:700; color:var(--navy-900); }
+  .theme-3 .t-h3{ font-size:14.5px; font-weight:700; color:var(--text-1); }
+  .theme-3 .t-body{ font-size:13.5px; color:var(--text-2); }
+  .theme-3 .t-caption{ font-size:11.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--teal-700); }
+  .theme-3 .t-mono{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-2); }
+
+  .theme-3 .t3-btn-primary{ background:var(--teal-500); color:#0B2B26; border-radius:99px; border-color:var(--teal-500); font-weight:700; }
+  .theme-3 .t3-btn-primary:hover{ background:#12A897; border-color:#12A897; }
+  .theme-3 .t3-btn-primary:active{ background:var(--teal-700); color:#fff; }
+  .theme-3 .t3-btn-primary:focus-visible{ box-shadow:0 0 0 3px rgba(20,184,166,0.3); }
+
+  .theme-3 .t3-btn-secondary{ background:var(--surface); color:var(--navy-700); border-radius:99px; border-color:#C9D3EE; }
+  .theme-3 .t3-btn-secondary:hover{ background:#EEF1FB; border-color:var(--navy-500); }
+  .theme-3 .t3-btn-secondary:active{ background:#E1E7FA; }
+
+  .theme-3 .t3-btn-ghost{ background:transparent; color:var(--teal-700); border-radius:99px; }
+  .theme-3 .t3-btn-ghost:hover{ background:var(--teal-100); }
+
+  .theme-3 .t3-btn-disabled{ background:var(--surface-alt); color:var(--text-3); border-radius:99px; border-color:var(--border-3); }
+
+  .theme-3 .hero-mock{ background:linear-gradient(165deg,#172554 0%, #1E3A8A 55%, #0F766E 130%); border-color:#172554; }
+  .theme-3 .hero-badge-bar{ background:rgba(255,255,255,0.12); color:#E7FBF7; border:1px solid rgba(255,255,255,0.2); }
+  .theme-3 .hero-headline{ font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; color:#FFFFFF; }
+  .theme-3 .hero-sub{ color:#D9E0F5; }
+  .theme-3 .orb{ background:radial-gradient(circle at 35% 30%, #3B5BC4, #172554); }
+  .theme-3 .orb::before{ background:var(--teal-500); border-radius:40% 60% 55% 45%/50% 45% 55% 50%; }
+  .theme-3 .orb .ring{ border-color:rgba(20,184,166,0.45); border-radius:50%; }
+
+  @media (prefers-reduced-motion:reduce){
+    .theme-2 .live-dot, .theme-2 .orb .ring{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="page-head">
+    <div class="eyebrow">Lectory · Design System Exploration</div>
+    <h1>Three integrated design themes for the marketing site</h1>
+    <p class="lede">
+      Grounded in the product and web requirements docs and the existing navy/teal brandmark, each theme below is a
+      complete, self-consistent system — color, type, live components, and a mini hero — not a mood board. All three
+      stay within functional B2B SaaS conventions: no parallax, no scroll-jacking, no auto-playing video. Motion is
+      limited to ordinary hover/focus feedback and one subtle "live" status pulse in Theme 2, which speaks directly
+      to the real-time positioning wedge. Hover and click the components below — they're live CSS, not screenshots.
+    </p>
+    <div class="source-chips">
+      <span class="source-chip">product_requirements.md</span>
+      <span class="source-chip">web_requirements.md</span>
+      <span class="source-chip">brand/logo.svg · brandmark.svg</span>
+      <span class="source-chip">Navy #1E3A8A · Teal #14B8A6</span>
+    </div>
+  </header>
+
+  <section class="glance">
+    <div class="glance-item">
+      <div class="g-num">THEME 01</div>
+      <h3>Executive Trust</h3>
+      <p>Light, navy-led, procurement-safe. For the CLO/VP HR buyer and Security &amp; Trust Center audience who need low visual risk.</p>
+    </div>
+    <div class="glance-item">
+      <div class="g-num">THEME 02</div>
+      <h3>Runtime Signal</h3>
+      <p>Dark, technical, teal-as-status-color. Sells the zero-render / real-time engine (Wedge 1 &amp; 2) to IT and instructional-design evaluators.</p>
+    </div>
+    <div class="glance-item">
+      <div class="g-num">THEME 03</div>
+      <h3>Practice Studio</h3>
+      <p>Warm-neutral light, rounder geometry. Carries the "safe sandbox to practice" promise for solutions and onboarding pages.</p>
+    </div>
+  </section>
+
+  <main class="themes-grid">
+
+    <!-- ================= THEME 1 ================= -->
+    <article class="theme-card theme-1">
+      <div class="card-head">
+        <span class="num-badge">Theme 01</span>
+        <h2 class="card-name">Executive Trust</h2>
+        <p class="card-pitch">
+          A restrained, editorial-feeling system for the buyer who is comparing Lectory to legacy LMS vendors on
+          risk, not novelty. Deep navy carries authority; teal appears only as a deliberate signal — a link, a live
+          badge, a focus ring — never as decoration.
+        </p>
+        <div class="tag-row">
+          <span class="tag">CLO / VP HR</span>
+          <span class="tag">Security &amp; Trust Center</span>
+          <span class="tag">Pricing</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <div class="sec-label">Color Foundation <span class="sec-hint">click to copy hex</span></div>
+          <div class="swatches">
+            <button class="swatch" data-hex="#1E3A8A"><span class="chip" style="background:#1E3A8A"></span><span class="meta"><span class="s-name">Brand Navy</span><span class="s-hex">#1E3A8A</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#0B1220"><span class="chip" style="background:#0B1220"></span><span class="meta"><span class="s-name">Navy Ink</span><span class="s-hex">#0B1220</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#14B8A6"><span class="chip" style="background:#14B8A6"></span><span class="meta"><span class="s-name">Signal Teal</span><span class="s-hex">#14B8A6</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#0E7490"><span class="chip" style="background:#0E7490"></span><span class="meta"><span class="s-name">Teal Ink</span><span class="s-hex">#0E7490</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#EEF2FB"><span class="chip" style="background:#EEF2FB"></span><span class="meta"><span class="s-name">Navy Tint</span><span class="s-hex">#EEF2FB</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#F7F8FA"><span class="chip" style="background:#F7F8FA"></span><span class="meta"><span class="s-name">Surface Alt</span><span class="s-hex">#F7F8FA</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#E1E5EC"><span class="chip" style="background:#E1E5EC"></span><span class="meta"><span class="s-name">Border</span><span class="s-hex">#E1E5EC</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#4B5567"><span class="chip" style="background:#4B5567"></span><span class="meta"><span class="s-name">Text Muted</span><span class="s-hex">#4B5567</span></span><span class="copied-flag">Copied</span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Typography Scale</div>
+          <div class="type-block">
+            <div class="type-row"><span class="type-sample t-display">Turn passive training into live simulation.</span><span class="type-tag">Source&nbsp;Serif&nbsp;4 / 700 / 26px</span></div>
+            <div class="type-row"><span class="type-sample t-h2">Architectural teardown</span><span class="type-tag">Source&nbsp;Serif&nbsp;4 / 600 / 19px</span></div>
+            <div class="type-row"><span class="type-sample t-h3">Automated rubric scorecards</span><span class="type-tag">Inter / 700 / 15px</span></div>
+            <div class="type-row"><span class="type-sample t-body">SOC2-aligned, SAML SSO, and RBAC across every cohort.</span><span class="type-tag">Inter / 400 / 13.5px</span></div>
+            <div class="type-row"><span class="type-sample t-caption">Wedge 03 · Assessment</span><span class="type-tag">Inter / 600 / 11.5px caps</span></div>
+            <div class="type-row"><span class="type-sample t-mono">policy.edit → live in &lt;10s</span><span class="type-tag">JetBrains&nbsp;Mono / 400 / 11.5px</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Live Button States <span class="sec-hint">hover / click</span></div>
+          <div class="btn-demo">
+            <div class="btn-row">
+              <button class="btn t1-btn-primary">Book a Demo</button>
+              <button class="btn t1-btn-secondary">Try a Class</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn t1-btn-ghost">View pricing →</button>
+              <button class="btn t1-btn-disabled" disabled>Submitting…</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Mini Hero Card</div>
+          <div class="hero-mock">
+            <span class="hero-badge-bar">Zero Video Rendering · SCORM &amp; xAPI · 10s Edits</span>
+            <div class="hero-headline">Real-time AI avatar simulations, not another training video.</div>
+            <p class="hero-sub">Active voice-to-voice role-play with instant behavioral scoring.</p>
+            <div class="hero-cta-row">
+              <button class="btn t1-btn-primary">Try a Class</button>
+              <button class="btn t1-btn-secondary" style="background:transparent;color:#EAF1FF;border-color:rgba(255,255,255,0.3);">Book a Demo</button>
+            </div>
+            <div class="orb"><span class="ring"></span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ================= THEME 2 ================= -->
+    <article class="theme-card theme-2">
+      <div class="card-head">
+        <span class="num-badge">Theme 02</span>
+        <h2 class="card-name">Runtime Signal</h2>
+        <p class="card-pitch">
+          A dark, technical register borrowed from developer tools and monitoring dashboards. It makes the "live,
+          client-side WebGL/TTS runtime" claim feel inspectable rather than marketed — mono type for state and
+          policy-edit language, teal reserved for anything that is actually happening in real time.
+        </p>
+        <div class="tag-row">
+          <span class="tag">why-real-time</span>
+          <span class="tag">Platform</span>
+          <span class="tag">IT / Security eval</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <div class="sec-label">Color Foundation <span class="sec-hint">click to copy hex</span></div>
+          <div class="swatches">
+            <button class="swatch" data-hex="#070A11"><span class="chip" style="background:#070A11"></span><span class="meta"><span class="s-name">Bg 950</span><span class="s-hex">#070A11</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#141C2E"><span class="chip" style="background:#141C2E"></span><span class="meta"><span class="s-name">Surface 800</span><span class="s-hex">#141C2E</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#14B8A6"><span class="chip" style="background:#14B8A6"></span><span class="meta"><span class="s-name">Live Teal</span><span class="s-hex">#14B8A6</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#2DD4C4"><span class="chip" style="background:#2DD4C4"></span><span class="meta"><span class="s-name">Teal Bright</span><span class="s-hex">#2DD4C4</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#3555B0"><span class="chip" style="background:#3555B0"></span><span class="meta"><span class="s-name">Navy Mid</span><span class="s-hex">#3555B0</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#232E48"><span class="chip" style="background:#232E48"></span><span class="meta"><span class="s-name">Border</span><span class="s-hex">#232E48</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#F1F5F9"><span class="chip" style="background:#F1F5F9"></span><span class="meta"><span class="s-name">Text Primary</span><span class="s-hex">#F1F5F9</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#94A3B8"><span class="chip" style="background:#94A3B8"></span><span class="meta"><span class="s-name">Text Muted</span><span class="s-hex">#94A3B8</span></span><span class="copied-flag">Copied</span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Typography Scale</div>
+          <div class="type-block">
+            <div class="type-row"><span class="type-sample t-display">Zero-render pipeline. &lt;10s policy edits.</span><span class="type-tag">Space&nbsp;Grotesk / 700 / 25px</span></div>
+            <div class="type-row"><span class="type-sample t-h2">Client-side WebGL/WebGPU runtime</span><span class="type-tag">Space&nbsp;Grotesk / 600 / 18px</span></div>
+            <div class="type-row"><span class="type-sample t-h3">Dynamic branching, zero marginal cost</span><span class="type-tag">Inter / 700 / 14.5px</span></div>
+            <div class="type-row"><span class="type-sample t-body">Scenario state is a JSON graph, streamed and rendered locally.</span><span class="type-tag">Inter / 400 / 13.5px</span></div>
+            <div class="type-row"><span class="type-sample t-caption">Wedge 01 · Runtime</span><span class="type-tag">Inter / 600 / 11px caps</span></div>
+            <div class="type-row"><span class="type-sample t-mono">state.graph.branch(5) → ∞ paths</span><span class="type-tag">JetBrains&nbsp;Mono / 400 / 11.5px</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Live Button States <span class="sec-hint">hover / click</span></div>
+          <div class="btn-demo">
+            <div class="btn-row">
+              <button class="btn t2-btn-primary">Try a Class</button>
+              <button class="btn t2-btn-secondary">Book a Demo</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn t2-btn-ghost">Read the architecture →</button>
+              <button class="btn t2-btn-disabled" disabled>Rendering…</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Mini Hero Card</div>
+          <div class="hero-mock">
+            <span class="hero-badge-bar"><span class="live-dot"></span>Runtime live · 0 pre-rendered frames</span>
+            <div class="hero-headline">The training video pipeline, replaced by a live runtime.</div>
+            <p class="hero-sub">WebGL avatars, real-time TTS, and JSON scenario state — no re-render, no re-upload.</p>
+            <div class="hero-cta-row">
+              <button class="btn t2-btn-primary">Try a Class</button>
+              <button class="btn t2-btn-secondary">Book a Demo</button>
+            </div>
+            <div class="orb"><span class="ring"></span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ================= THEME 3 ================= -->
+    <article class="theme-card theme-3">
+      <div class="card-head">
+        <span class="num-badge">Theme 03</span>
+        <h2 class="card-name">Practice Studio</h2>
+        <p class="card-pitch">
+          Keeps the navy/teal palette but warms the canvas and rounds the geometry — the register for pages that
+          have to convince a nervous first-time manager, not just a CLO, that this is a judgement-free place to
+          rehearse a hard conversation.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Solutions pages</span>
+          <span class="tag">Onboarding</span>
+          <span class="tag">Try a Class flow</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <div class="sec-label">Color Foundation <span class="sec-hint">click to copy hex</span></div>
+          <div class="swatches">
+            <button class="swatch" data-hex="#172554"><span class="chip" style="background:#172554"></span><span class="meta"><span class="s-name">Navy Ink</span><span class="s-hex">#172554</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#1E3A8A"><span class="chip" style="background:#1E3A8A"></span><span class="meta"><span class="s-name">Brand Navy</span><span class="s-hex">#1E3A8A</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#14B8A6"><span class="chip" style="background:#14B8A6"></span><span class="meta"><span class="s-name">Warm Teal</span><span class="s-hex">#14B8A6</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#CFF7F0"><span class="chip" style="background:#CFF7F0"></span><span class="meta"><span class="s-name">Teal Tint</span><span class="s-hex">#CFF7F0</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#FAF8F3"><span class="chip" style="background:#FAF8F3"></span><span class="meta"><span class="s-name">Canvas</span><span class="s-hex">#FAF8F3</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#F3EFE6"><span class="chip" style="background:#F3EFE6"></span><span class="meta"><span class="s-name">Surface Alt</span><span class="s-hex">#F3EFE6</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#E9E2D3"><span class="chip" style="background:#E9E2D3"></span><span class="meta"><span class="s-name">Border</span><span class="s-hex">#E9E2D3</span></span><span class="copied-flag">Copied</span></button>
+            <button class="swatch" data-hex="#5B5A66"><span class="chip" style="background:#5B5A66"></span><span class="meta"><span class="s-name">Text Muted</span><span class="s-hex">#5B5A66</span></span><span class="copied-flag">Copied</span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Typography Scale</div>
+          <div class="type-block">
+            <div class="type-row"><span class="type-sample t-display">Practice the hard conversation first.</span><span class="type-tag">Plus&nbsp;Jakarta&nbsp;Sans / 800 / 25px</span></div>
+            <div class="type-row"><span class="type-sample t-h2">A judgement-free sandbox</span><span class="type-tag">Plus&nbsp;Jakarta&nbsp;Sans / 700 / 18px</span></div>
+            <div class="type-row"><span class="type-sample t-h3">Manager 1-on-1s &amp; PIPs</span><span class="type-tag">Inter / 700 / 14.5px</span></div>
+            <div class="type-row"><span class="type-sample t-body">Three interactive turns, one honest scorecard.</span><span class="type-tag">Inter / 400 / 13.5px</span></div>
+            <div class="type-row"><span class="type-sample t-caption">Solutions · Leadership</span><span class="type-tag">Inter / 700 / 11.5px caps</span></div>
+            <div class="type-row"><span class="type-sample t-mono">track=leadership&amp;turns=3</span><span class="type-tag">JetBrains&nbsp;Mono / 400 / 11.5px</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Live Button States <span class="sec-hint">hover / click</span></div>
+          <div class="btn-demo">
+            <div class="btn-row">
+              <button class="btn t3-btn-primary">Try a Class</button>
+              <button class="btn t3-btn-secondary">Book a Demo</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn t3-btn-ghost">See all tracks →</button>
+              <button class="btn t3-btn-disabled" disabled>Loading scenario…</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-label">Mini Hero Card</div>
+          <div class="hero-mock">
+            <span class="hero-badge-bar">Manager 1-on-1 · Compliance · Sales</span>
+            <div class="hero-headline">A safe room to practice the conversation you're dreading.</div>
+            <p class="hero-sub">Voice or text role-play with an AI avatar — three turns, real feedback.</p>
+            <div class="hero-cta-row">
+              <button class="btn t3-btn-primary">Try a Class</button>
+              <button class="btn t3-btn-secondary" style="background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.35);">Book a Demo</button>
+            </div>
+            <div class="orb"><span class="ring"></span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="page-foot">
+    <h2>Reading this before locking tokens</h2>
+    <p>
+      All three themes share one brand navy (<strong>#1E3A8A</strong>) and one brand teal (<strong>#14B8A6</strong>) —
+      only the surrounding neutrals, type pairing, and how hard teal is pushed change. That's deliberate: the marketing
+      site can carry one theme end-to-end, or run <strong>Executive Trust</strong> on buyer-facing pages (home, security,
+      pricing) while <strong>Practice Studio</strong> takes the solutions pages, without reading as two different products.
+      <strong>Runtime Signal</strong> is the outlier — a dark, technical mode purpose-built for <code>/why-real-time</code>
+      and platform-architecture content — and is the one most worth a stakeholder gut-check before it goes further than a page or two.
+    </p>
+    <p>
+      Every button state above is real CSS (<code>:hover</code>, <code>:active</code>, <code>:focus-visible</code>,
+      <code>:disabled</code>), and every swatch copies its hex on click. Nothing on this page scroll-jacks, autoplays,
+      or hijacks the wheel event — all motion is a hover response or (Theme 2 only) a slow, reduced-motion-aware status pulse.
+    </p>
+  </footer>
+
+<script>
+(function(){
+  document.querySelectorAll('.swatch').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var hex = btn.getAttribute('data-hex');
+      var reset = function(){ btn.classList.remove('copied'); };
+      var mark = function(){
+        btn.classList.add('copied');
+        clearTimeout(btn._t);
+        btn._t = setTimeout(reset, 900);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(hex).then(mark).catch(mark);
+      } else {
+        mark();
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
