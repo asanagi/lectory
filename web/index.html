@@ -63,9 +63,29 @@
 
       <!-- Nav Actions -->
       <div class="nav-actions">
-        <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="btn btn-ghost">Sign In</a>
-        <a href="https://app.lectory.dev" class="btn btn-primary">Go to App</a>
+        <a href="https://app.lectory.dev" class="btn btn-ghost" id="nav-signin-link">Sign In</a>
+        <a href="https://app.lectory.dev" class="btn btn-primary" id="nav-primary-cta">Sign Up</a>
       </div>
+      <script>
+        (function() {
+          function syncAuthNav() {
+            var isAuth = document.cookie.split('; ').some(function(row) {
+              return row.indexOf('lectory_auth=1') === 0;
+            });
+            var cta = document.getElementById('nav-primary-cta');
+            var signin = document.getElementById('nav-signin-link');
+            if (isAuth && cta) {
+              cta.textContent = 'Go to App →';
+              if (signin) signin.style.display = 'none';
+            } else if (cta) {
+              cta.textContent = 'Sign Up';
+              if (signin) signin.style.display = '';
+            }
+          }
+          syncAuthNav();
+          window.addEventListener('focus', syncAuthNav);
+        })();
+      </script>
     </div>
   </header>
 

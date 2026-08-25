@@ -13,6 +13,7 @@ export class AppHeader extends LitElement {
       position: sticky;
       top: 0;
       z-index: 50;
+      font-family: inherit;
     }
 
     .header-inner {
@@ -35,7 +36,7 @@ export class AppHeader extends LitElement {
     .brand-logo {
       width: 32px;
       height: 32px;
-      background: #4f46e5;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -72,7 +73,22 @@ export class AppHeader extends LitElement {
     .right-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
+    }
+
+    .website-link {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .website-link:hover {
+      color: #38bdf8;
     }
   `;
 
@@ -91,6 +107,10 @@ export class AppHeader extends LitElement {
         </nav>
 
         <div class="right-actions">
+          <a href="https://lectory.dev" class="website-link" target="_blank" rel="noopener">
+            <span>Go to Website</span>
+            <span>↗</span>
+          </a>
           <user-menu></user-menu>
         </div>
       </header>

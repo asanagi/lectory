@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
+import { auth } from './firebase.js';
 
 @customElement('user-menu')
 export class UserMenu extends LitElement {
@@ -8,6 +10,35 @@ export class UserMenu extends LitElement {
   @property({ type: Boolean }) isSignedIn = false;
 
   @state() private _isOpen = false;
+  @state() private _userEmail = '';
+  private _unsubscribeAuth?: () => void;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._unsubscribeAuth = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        this.isSignedIn = true;
+        this.userName = user.displayName || user.email?.split('@')[0] || 'Developer';
+        this._userEmail = user.email || '';
+        // Synchronize presence cookie across domain
+        document.cookie = 'lectory_auth=1; path=/; max-age=2592000; SameSite=Lax';
+      } else {
+        this.isSignedIn = false;
+        this.userName = 'Guest Developer';
+        this._userEmail = '';
+        // Clear presence cookie
+        document.cookie = 'lectory_auth=; path=/; max-age=0; SameSite=Lax';
+      }
+      this.requestUpdate();
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._unsubscribeAuth) {
+      this._unsubscribeAuth();
+    }
+  }
 
   static styles = css`
     :host {
@@ -34,6 +65,22 @@ export class UserMenu extends LitElement {
     .avatar-btn:hover {
       background: #334155;
       border-color: #6366f1;
+    }
+
+    .signin-btn {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .signin-btn:hover {
+      opacity: 0.9;
     }
 
     .avatar-circle {
@@ -129,19 +176,34 @@ export class UserMenu extends LitElement {
     this._isOpen = !this._isOpen;
   }
 
-  private _handleSignOut() {
-    // Unwired placeholder: Lesson 2.7 attaches real Firebase Auth
-    alert('Sign-out will be wired with Firebase Auth in Lesson 2.7!');
+  private _openAuthModal() {
+    this.dispatchEvent(new CustomEvent('open-auth-modal', { bubbles: true, composed: true }));
+  }
+
+  private async _handleSignOut() {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error('Sign-out error:', err);
+    }
     this._isOpen = false;
   }
 
   render() {
+    if (!this.isSignedIn) {
+      return html`
+        <button class="signin-btn" @click="${this._openAuthModal}">
+          Sign In
+        </button>
+      `;
+    }
+
     const initials = this.userName
       .split(' ')
       .map((n) => n[0])
       .join('')
       .substring(0, 2)
-      .toUpperCase();
+      .toUpperCase() || 'U';
 
     return html`
       <button class="avatar-btn" @click="${this._toggleDropdown}" aria-expanded="${this._isOpen}">
@@ -155,7 +217,7 @@ export class UserMenu extends LitElement {
             <div class="dropdown">
               <div class="user-info">
                 <div class="user-name">${this.userName}</div>
-                <div class="user-role">${this.userRole}</div>
+                <div class="user-role">${this._userEmail || this.userRole}</div>
               </div>
               <button class="menu-item">⚙ Workspace Settings</button>
               <button class="menu-item">📚 My Courses</button>
