@@ -1,8 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { createClient } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
 import { UserService } from './gen/app/v1/user_pb.js';
+import { auth } from './firebase.js';
 import './user-menu.js';
 
 const transport = createConnectTransport({
@@ -15,15 +17,40 @@ const userClient = createClient(UserService, transport);
 export class AppHeader extends LitElement {
   @state() private _userName = '';
   @state() private _userRole = '';
+  private _unsubscribeAuth?: () => void;
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback();
-    try {
-      const profile = await userClient.getProfile({ userId: 'current-user' });
-      this._userName = profile.displayName;
-      this._userRole = profile.roles.join(', ');
-    } catch (err) {
-      console.warn('UserService.GetProfile unavailable, falling back to local auth state', err);
+    this._unsubscribeAuth = onAuthStateChanged(auth, async (user: User | null) => {
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          const profile = await userClient.getProfile(
+            { userId: user.uid || 'test-user-id' },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          this._userName = profile.displayName || user.displayName || user.email?.split('@')[0] || 'Developer';
+          this._userRole = profile.roles.length > 0 ? profile.roles.join(', ') : 'Pro Tier';
+        } catch (err) {
+          console.warn('UserService.GetProfile unavailable, falling back to local auth state', err);
+          this._userName = user.displayName || user.email?.split('@')[0] || 'Developer';
+          this._userRole = 'Pro Tier';
+        }
+      } else {
+        this._userName = '';
+        this._userRole = '';
+      }
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._unsubscribeAuth) {
+      this._unsubscribeAuth();
     }
   }
 

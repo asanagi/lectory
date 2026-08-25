@@ -1,0 +1,28 @@
+# Ship the Go backend to Cloud Run.
+name: Deploy backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/**'
+      - '.github/workflows/deploy-api.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Build binary
+        working-directory: services/user
+        run: go build -o app .
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: user-service
+          region: us-central1
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+

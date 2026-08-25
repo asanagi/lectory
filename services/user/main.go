@@ -8,12 +8,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
 	"cloud.google.com/go/firestore"
 	connect "connectrpc.com/connect"
 	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/auth"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -21,6 +23,56 @@ import (
 	appv1 "lectory/gen/go/app/v1"
 	"lectory/gen/go/app/v1/appv1connect"
 )
+
+func newAuthInterceptor(authClient *auth.Client) connect.UnaryInterceptorFunc {
+	return func(next connect.UnaryFunc) connect.UnaryFunc {
+		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
+			authHeader := req.Header().Get("Authorization")
+			if authHeader == "" {
+				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("missing Authorization header"))
+			}
+
+			parts := strings.SplitN(authHeader, " ", 2)
+			if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
+				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("invalid Authorization header format, expected Bearer <token>"))
+			}
+
+			tokenString := parts[1]
+			_, err := authClient.VerifyIDToken(ctx, tokenString)
+			if err != nil {
+				return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token: %w", err))
+			}
+
+			return next(ctx, req)
+		}
+	}
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	allowedOrigins := map[string]bool{
+		"http://localhost:5173":   true,
+		"http://localhost:8081":   true,
+		"http://127.0.0.1:8081":  true,
+		"https://app.lectory.dev": true,
+	}
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if allowedOrigins[origin] {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, Connect-Protocol-Version")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 type userServiceServer struct {
 	firestoreClient *firestore.Client
@@ -87,6 +139,11 @@ func main() {
 		log.Fatalf("Error initializing Firebase App: %v", err)
 	}
 
+	authClient, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("Error initializing Auth client: %v", err)
+	}
+
 	firestoreClient, err := app.Firestore(ctx)
 	if err != nil {
 		log.Fatalf("Error initializing Firestore client: %v", err)
@@ -95,9 +152,12 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Register UserService Connect RPC handler
+	// Register UserService Connect RPC handler with auth interceptor
 	userService := &userServiceServer{firestoreClient: firestoreClient}
-	path, handler := appv1connect.NewUserServiceHandler(userService)
+	path, handler := appv1connect.NewUserServiceHandler(
+		userService,
+		connect.WithInterceptors(newAuthInterceptor(authClient)),
+	)
 	mux.Handle(path, handler)
 
 	// Health check endpoint
@@ -120,7 +180,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:         ":" + port,
-		Handler:      mux,
+		Handler:      corsMiddleware(mux),
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  60 * time.Second,
