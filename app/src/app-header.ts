@@ -1,9 +1,32 @@
 import { LitElement, html, css } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
+import { createClient } from '@connectrpc/connect';
+import { createConnectTransport } from '@connectrpc/connect-web';
+import { UserService } from './gen/app/v1/user_pb.js';
 import './user-menu.js';
+
+const transport = createConnectTransport({
+  baseUrl: 'http://localhost:8082',
+});
+
+const userClient = createClient(UserService, transport);
 
 @customElement('app-header')
 export class AppHeader extends LitElement {
+  @state() private _userName = '';
+  @state() private _userRole = '';
+
+  async connectedCallback() {
+    super.connectedCallback();
+    try {
+      const profile = await userClient.getProfile({ userId: 'current-user' });
+      this._userName = profile.displayName;
+      this._userRole = profile.roles.join(', ');
+    } catch (err) {
+      console.warn('UserService.GetProfile unavailable, falling back to local auth state', err);
+    }
+  }
+
   static styles = css`
     :host {
       display: block;
@@ -111,9 +134,13 @@ export class AppHeader extends LitElement {
             <span>Go to Website</span>
             <span>↗</span>
           </a>
-          <user-menu></user-menu>
+          <user-menu
+            .userName="${this._userName || 'Guest Developer'}"
+            .userRole="${this._userRole || 'Pro Tier'}"
+          ></user-menu>
         </div>
       </header>
     `;
   }
 }
+

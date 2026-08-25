@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package app.v1;
+
+option go_package = "lectory/gen/go/app/v1;appv1";
+
+service UserService {
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+}
+
+message GetProfileRequest {
+  string user_id = 1;
+}
+
+message GetProfileResponse {
+  string user_id = 1;
+  string display_name = 2;
+  repeated string roles = 3;
+}
