@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'services/**'
+      - 'Dockerfile'
       - '.github/workflows/deploy-api.yml'
 
 jobs:
@@ -13,17 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          go-version: '1.22'
-      - name: Build binary
-        working-directory: services/user
-        run: go build -o app .
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: user-service
           region: us-central1
           source: .
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
