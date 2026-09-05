@@ -48,6 +48,3 @@ jobs:
           region: us-central1
           source: .
           env_vars: ENV=staging,FIRESTORE_DATABASE=staging
-          # PORT is reserved by Cloud Run: it is injected automatically from the
-          # container port, so it must be set via --port, never via env_vars.
-          flags: '--port=8082'
