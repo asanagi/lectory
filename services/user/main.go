@@ -12,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	"cloud.google.com/go/compute/metadata"
 	"cloud.google.com/go/firestore"
 	connect "connectrpc.com/connect"
 	firebase "firebase.google.com/go/v4"
@@ -52,7 +53,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 	allowedOrigins := map[string]bool{
 		"http://localhost:5173":   true,
 		"http://localhost:8081":   true,
-		"http://127.0.0.1:8081":  true,
+		"http://127.0.0.1:8081":   true,
 		"https://app.lectory.dev": true,
 	}
 
@@ -123,6 +124,11 @@ func main() {
 		port = "8082"
 	}
 
+	env := os.Getenv("ENV")
+	if env == "" {
+		env = "production"
+	}
+
 	ctx := context.Background()
 
 	var app *firebase.App
@@ -144,7 +150,19 @@ func main() {
 		log.Fatalf("Error initializing Auth client: %v", err)
 	}
 
-	firestoreClient, err := app.Firestore(ctx)
+	// Environment-aware Firestore: use a named database when FIRESTORE_DATABASE is
+	// set (staging isolation); otherwise fall back to the app default (production).
+	var firestoreClient *firestore.Client
+	if dbID := os.Getenv("FIRESTORE_DATABASE"); dbID != "" && dbID != "(default)" {
+		projectID := os.Getenv("FIREBASE_PROJECT_ID")
+		if projectID == "" {
+			// On Cloud Run the project id is available from the metadata server.
+			projectID, _ = metadata.ProjectID()
+		}
+		firestoreClient, err = firestore.NewClientWithDatabase(ctx, projectID, dbID)
+	} else {
+		firestoreClient, err = app.Firestore(ctx)
+	}
 	if err != nil {
 		log.Fatalf("Error initializing Firestore client: %v", err)
 	}
@@ -164,7 +182,7 @@ func main() {
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte(`{"status":"ok","service":"user-service"}`))
+		_, _ = w.Write([]byte(`{"status":"ok","service":"user-service","env":"` + env + `"}`))
 	})
 
 	// Root endpoint

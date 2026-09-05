@@ -27,3 +27,25 @@ jobs:
           service: user-service
           region: us-central1
           source: .
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_STAGING }}
+
+      - name: Deploy to Cloud Run (staging)
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          project_id: lectory-prod
+          service: user-service-staging
+          region: us-central1
+          source: .
+          env_vars: ENV=staging,PORT=8082,FIRESTORE_DATABASE=staging
+          flags: '--port=8082'
