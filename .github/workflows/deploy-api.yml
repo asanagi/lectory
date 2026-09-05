@@ -48,3 +48,4 @@ jobs:
           region: us-central1
           source: .
           env_vars: ENV=staging,FIRESTORE_DATABASE=staging
+          flags: '--port=8080'
