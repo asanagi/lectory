@@ -25,21 +25,29 @@ import (
 	"lectory/gen/go/app/v1/appv1connect"
 )
 
-func newAuthInterceptor(authClient *auth.Client) connect.UnaryInterceptorFunc {
+// TokenVerifier defines the contract for ID token verification. Concrete *auth.Client satisfies this.
+type TokenVerifier interface {
+	VerifyIDToken(ctx context.Context, idToken string) (*auth.Token, error)
+}
+
+func newAuthInterceptor(verifier TokenVerifier) connect.UnaryInterceptorFunc {
 	return func(next connect.UnaryFunc) connect.UnaryFunc {
 		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
-			authHeader := req.Header().Get("Authorization")
+			authHeader := strings.TrimSpace(req.Header().Get("Authorization"))
 			if authHeader == "" {
 				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("missing Authorization header"))
 			}
 
-			parts := strings.SplitN(authHeader, " ", 2)
-			if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
+			if !strings.HasPrefix(strings.ToLower(authHeader), "bearer") {
 				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("invalid Authorization header format, expected Bearer <token>"))
 			}
 
-			tokenString := parts[1]
-			_, err := authClient.VerifyIDToken(ctx, tokenString)
+			tokenString := strings.TrimSpace(authHeader[len("bearer"):])
+			if tokenString == "" {
+				return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("empty token"))
+			}
+
+			_, err := verifier.VerifyIDToken(ctx, tokenString)
 			if err != nil {
 				return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token: %w", err))
 			}
@@ -75,25 +83,31 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-type userServiceServer struct {
-	firestoreClient *firestore.Client
+// Profile represents the user profile data model.
+type Profile struct {
+	UserID      string   `json:"user_id"`
+	DisplayName string   `json:"display_name"`
+	Roles       []string `json:"roles"`
 }
 
-func (s *userServiceServer) GetProfile(
-	ctx context.Context,
-	req *connect.Request[appv1.GetProfileRequest],
-) (*connect.Response[appv1.GetProfileResponse], error) {
-	userID := req.Msg.GetUserId()
-	if userID == "" {
-		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("userId is required"))
-	}
+// ProfileStore defines the data layer contract for user profiles.
+type ProfileStore interface {
+	GetProfile(ctx context.Context, userID string) (*Profile, error)
+}
 
-	doc, err := s.firestoreClient.Collection("users").Doc(userID).Get(ctx)
+// FirestoreProfileStore implements ProfileStore backed by Google Cloud Firestore.
+type FirestoreProfileStore struct {
+	client *firestore.Client
+}
+
+func NewFirestoreProfileStore(client *firestore.Client) *FirestoreProfileStore {
+	return &FirestoreProfileStore{client: client}
+}
+
+func (s *FirestoreProfileStore) GetProfile(ctx context.Context, userID string) (*Profile, error) {
+	doc, err := s.client.Collection("users").Doc(userID).Get(ctx)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("user %s not found", userID))
-		}
-		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to fetch user: %w", err))
+		return nil, err
 	}
 
 	data := doc.Data()
@@ -110,10 +124,42 @@ func (s *userServiceServer) GetProfile(
 		roles = strRoles
 	}
 
-	res := connect.NewResponse(&appv1.GetProfileResponse{
-		UserId:      userID,
+	return &Profile{
+		UserID:      userID,
 		DisplayName: displayName,
 		Roles:       roles,
+	}, nil
+}
+
+type userServiceServer struct {
+	store ProfileStore
+}
+
+func newUserServiceServer(store ProfileStore) *userServiceServer {
+	return &userServiceServer{store: store}
+}
+
+func (s *userServiceServer) GetProfile(
+	ctx context.Context,
+	req *connect.Request[appv1.GetProfileRequest],
+) (*connect.Response[appv1.GetProfileResponse], error) {
+	userID := req.Msg.GetUserId()
+	if userID == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("userId is required"))
+	}
+
+	profile, err := s.store.GetProfile(ctx, userID)
+	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("user %s not found", userID))
+		}
+		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to fetch user: %w", err))
+	}
+
+	res := connect.NewResponse(&appv1.GetProfileResponse{
+		UserId:      profile.UserID,
+		DisplayName: profile.DisplayName,
+		Roles:       profile.Roles,
 	})
 	return res, nil
 }
@@ -171,7 +217,8 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Register UserService Connect RPC handler with auth interceptor
-	userService := &userServiceServer{firestoreClient: firestoreClient}
+	store := NewFirestoreProfileStore(firestoreClient)
+	userService := newUserServiceServer(store)
 	path, handler := appv1connect.NewUserServiceHandler(
 		userService,
 		connect.WithInterceptors(newAuthInterceptor(authClient)),
