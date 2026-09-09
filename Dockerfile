@@ -1,4 +1,5 @@
 # Multi-stage Dockerfile for user-service
+# CI note: touching this file triggers the gated pipeline's pull_request pre-flight checks (lint + unit-tests).
 FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
