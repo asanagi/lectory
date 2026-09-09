@@ -1,0 +1,50 @@
+# Class 5 · Lesson 5.5 — Optional PR pre-flight gate.
+# Runs the fast static-analysis and offline unit stages on every pull request so a
+# PR gets genuine green status checks before anything merges. Deployment stages live
+# in deploy-api.yml and are gated on push-to-main / environment approval, so opening
+# a PR never deploys.
+name: PR Pre-Flight
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/**'
+      - 'Dockerfile'
+      - '.github/workflows/pr-preflight.yml'
+
+jobs:
+  lint:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'services/user/go.mod'
+          cache-dependency-path: 'services/user/go.sum'
+
+      - name: Go Vet & Diagnostics
+        working-directory: services/user
+        run: go vet ./...
+
+  unit-tests:
+    name: Unit Tests (Offline)
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'services/user/go.mod'
+          cache-dependency-path: 'services/user/go.sum'
+
+      - name: Run Unit Tests with Coverage
+        working-directory: services/user
+        run: |
+          go test -count=1 -coverprofile=coverage.out ./...
+          go tool cover -func=coverage.out
