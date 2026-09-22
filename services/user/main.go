@@ -177,15 +177,20 @@ func main() {
 
 	ctx := context.Background()
 
+	conf := &firebase.Config{}
+	if p := os.Getenv("FIREBASE_PROJECT_ID"); p != "" {
+		conf.ProjectID = p
+	}
+
 	var app *firebase.App
 	var err error
 
 	if credPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"); credPath != "" {
-		app, err = firebase.NewApp(ctx, nil)
+		app, err = firebase.NewApp(ctx, conf)
 	} else if _, errStat := os.Stat("service-account.json"); errStat == nil {
-		app, err = firebase.NewApp(ctx, nil, option.WithCredentialsFile("service-account.json"))
+		app, err = firebase.NewApp(ctx, conf, option.WithCredentialsFile("service-account.json"))
 	} else {
-		app, err = firebase.NewApp(ctx, nil)
+		app, err = firebase.NewApp(ctx, conf)
 	}
 	if err != nil {
 		log.Fatalf("Error initializing Firebase App: %v", err)
@@ -196,16 +201,19 @@ func main() {
 		log.Fatalf("Error initializing Auth client: %v", err)
 	}
 
-	// Environment-aware Firestore: use a named database when FIRESTORE_DATABASE is
-	// set (staging isolation); otherwise fall back to the app default (production).
+	// Environment-aware Firestore: supports dedicated project isolation (FIREBASE_PROJECT_ID / Cloud Run metadata)
+	// and optional named databases via FIRESTORE_DATABASE.
 	var firestoreClient *firestore.Client
+	projectID := os.Getenv("FIREBASE_PROJECT_ID")
+	if projectID == "" {
+		// On Cloud Run the project id is available from the metadata server.
+		projectID, _ = metadata.ProjectID()
+	}
+
 	if dbID := os.Getenv("FIRESTORE_DATABASE"); dbID != "" && dbID != "(default)" {
-		projectID := os.Getenv("FIREBASE_PROJECT_ID")
-		if projectID == "" {
-			// On Cloud Run the project id is available from the metadata server.
-			projectID, _ = metadata.ProjectID()
-		}
 		firestoreClient, err = firestore.NewClientWithDatabase(ctx, projectID, dbID)
+	} else if projectID != "" {
+		firestoreClient, err = firestore.NewClient(ctx, projectID)
 	} else {
 		firestoreClient, err = app.Firestore(ctx)
 	}

@@ -13,6 +13,20 @@ export class AppShell extends LitElement {
 
   private _unsubscribeAuth?: () => void;
 
+  connectedCallback() {
+    super.connectedCallback();
+    // Register Service Worker for PWA installability (guarded against dev HMR clashes).
+    // Cache invalidation is by version bump of CACHE_NAME in public/sw.js.
+    const shouldRegisterSW = import.meta.env.PROD || import.meta.env.VITE_ENABLE_SW === 'true';
+
+    if ('serviceWorker' in navigator && shouldRegisterSW) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => console.log('PWA Service Worker registered:', reg.scope))
+        .catch((err) => console.warn('Service Worker registration failed:', err));
+    }
+  }
+
   firstUpdated() {
     this._unsubscribeAuth = onAuthStateChanged(auth, (user: User | null) => {
       this._currentUser = user;

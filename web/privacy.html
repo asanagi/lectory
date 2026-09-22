@@ -44,26 +44,33 @@
 <body>
 
   <!-- Global Header Navigation -->
-  <header class="site-header">
+  <header class="site-header" id="site-header">
     <div class="container header-inner">
       <a href="/" class="logo-link" title="Lectory Home">
         <img src="/brand/logo.svg" alt="Lectory" height="34" style="height: 34px; width: auto; display: block;" />
       </a>
 
-      <!-- Desktop Nav -->
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="/features.html" class="nav-link">Features</a></li>
-          <li><a href="/solutions.html" class="nav-link">Solutions</a></li>
-          <li><a href="/about.html" class="nav-link">About</a></li>
-          <li><a href="/contact.html" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
+      <!-- Mobile Navigation Toggle Button -->
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="header-nav" aria-label="Toggle navigation">
+        <span class="nav-toggle-icon"></span>
+      </button>
 
-      <!-- Nav Actions -->
-      <div class="nav-actions">
-        <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="btn btn-ghost">Sign In</a>
-        <a href="https://app.lectory.dev" class="btn btn-primary">Go to App</a>
+      <!-- Navigation & Action Links Container -->
+      <div class="header-nav" id="header-nav">
+        <nav aria-label="Main navigation">
+          <ul class="nav-menu">
+            <li><a href="/features.html" class="nav-link">Features</a></li>
+            <li><a href="/solutions.html" class="nav-link">Solutions</a></li>
+            <li><a href="/about.html" class="nav-link">About</a></li>
+            <li><a href="/contact.html" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- Nav Actions -->
+        <div class="nav-actions">
+          <a href="https://app.lectory.dev/login?utm_source=marketing&utm_medium=nav_signin" class="btn btn-ghost">Sign In</a>
+          <a href="https://app.lectory.dev" class="btn btn-primary">Go to App</a>
+        </div>
       </div>
     </div>
   </header>
