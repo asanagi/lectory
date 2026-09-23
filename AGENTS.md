@@ -5,9 +5,11 @@
 ---
 
 ## 1. Product Identity & Architecture Vision
-- **Product:** Lectory — AI-Native Interactive Learning Platform.
-- **Target Audience:** Solo developers & teams needing rapid course authoring without heavy video production overhead.
-- **Core Architecture Principle:** Render at playback, not at authoring. Deliver dynamic browser slides and AI streaming narration in real time rather than compiling multi-gigabyte video files.
+- **Product:** Lectory — AI-Native Interactive Learning Platform, evolving into an Autonomous Knowledge Management & Execution Platform.
+- **Product Roadmap & Evolution:**
+  - *Phase 1 (Core Product — Pillar 1):* Interactive Learning & Browser-Rendered Course Engine. Delivers dynamic browser slides, WebGL 3D avatars, and real-time AI streaming narration at playback time rather than compiling multi-gigabyte video files.
+  - *Phase 2 (Enterprise Evolution — Pillar 2):* Autonomous Knowledge Management & Action Engine. Ingests multi-source documents and codebases into zero-idle SQLite graphs (D1) and semantic vectors (Vectorize), enabling hybrid RAG and closed-loop operations via typed Go MCP action gateways.
+- **Target Audience:** Solo developers, technical founders & teams needing rapid knowledge transfer and automated execution without heavy infrastructure overhead.
 - **Business Model & Scale:** Solo developer-operated SaaS with a zero-idle-cost operational footprint.
 
 ---
@@ -22,6 +24,7 @@
 | **Backend Service** | Go 1.22+ on Google Cloud Run | Single static binary, microsecond startup, scales to 0 idle instances |
 | **API Contract** | Connect-RPC over Protobuf (`proto/`) | Single contract source of truth; generate via `buf generate` |
 | **Database & Auth** | Google Cloud Firestore + Firebase Auth | Serverless NoSQL document model, zero idle database cost |
+| **Edge Data & AI (Phase 2)** | Cloudflare D1 + Vectorize + R2 + Workers AI | Zero-idle SQLite knowledge graphs (FTS5 + CTEs), vectors, and blob storage |
 
 ### Strictly Forbidden (Hallucination Blacklist)
 - ❌ **NO React, Next.js, Vue, or Angular:** Do not suggest or install heavy virtual-DOM frameworks. All frontend UI uses Lit Web Components.
