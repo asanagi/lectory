@@ -1,5 +1,71 @@
+# ==============================================================================
+# 1. AI AGENT SCRATCHPADS & LOCAL EXECUTION
+# Prevents ephemeral planning, scratch scripts, and agent brainstorming from leaking
+# ==============================================================================
+.agent/
+.agents/scratch/
+.agents/runs/
+.claude/
+.gemini/
+.openai/
+scratch/
+scratch.*
+*.scratch.*
+tmp/agent/
+ai_prompts_local/
+*implementation_plan*.md
+!docs/plans/                       # Keep official architecture decisions, ignore agent scratch
+
+# ==============================================================================
+# 2. AGENTIC IDE WORKSPACES & LOCAL SESSIONS
+# IDEs maintain local embeddings, checkpoint diffs, conversation databases, and task state
+# ==============================================================================
+.cursor/
+.cursorrules.local                 # Keep .cursorrules, ignore developer-local overrides
+.windsurf/
+.codeium/
+.aider*
+.cline/
+.roo/
+.continue/
+*.db-journal                       # Local vector/session sqlite locks
+
+# ==============================================================================
+# 3. HIGH-RISK CREDENTIALS & LEAK PATHS (Targeted by Agent Auto-Scaffolding)
+# Agents often suggest writing credentials to local JSON or generating test certs
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.local.env
+*service-account*.json
+*credentials*.json
+*secret*.key
+firebase-debug.log*
+firestore-debug.log*
+
+# ==============================================================================
+# 4. CONTEXT / TOKEN OPTIMIZATION (Repo Indexing Noise)
+# Keeps agent context windows focused; prevents agent search tools from choking on blobs
+# ==============================================================================
+*.log
+*.sqlite
+*.dump
+coverage/
+coverage.out
+*.out
+*.prof
+*.trace
+pnpm-debug.log*
+yarn-debug.log*
+
+# ==============================================================================
+# 5. MONOREPO STANDARD HYGIENE
+# ==============================================================================
 node_modules/
 dist/
-.env
-*service-account*.json
+build/
+.next/
+.turbo/
 .DS_Store
+Thumbs.db

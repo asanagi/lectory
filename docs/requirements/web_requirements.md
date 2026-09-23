@@ -1,4 +1,4 @@
-﻿# Marketing Website Requirements
+# Marketing Website Requirements
 
 > Note: Product features, architectural specifications, and core value propositions are governed by [product_requirements.md](./product_requirements.md). This document defines the information architecture, page layouts, navigation, and technical UX requirements for the corporate marketing website (lectory.dev).
 
@@ -23,21 +23,47 @@ The marketing site addresses enterprise buyer and evaluator personas:
 
 ---
 
-## 3. Header Navigation
+## 3. Header Navigation & Responsive Contract
 
-`
+### 3.1 Desktop Layout (`≥ 768px`)
+```text
 [ LOGO ]        Features    Solutions    About    Contact        [ Sign In ]   [ Go to App ]
-`
-
-- **Brand Logo:** Logo lockup linking to /index.html
+```
+- **Brand Logo:** Logo lockup linking to `/index.html`
 - **Center Nav Links:**
-  - Features → /#features (anchor link to Home features section)
-  - Solutions → /#solutions (anchor link to Home corporate training use cases)
-  - About → /#about (anchor link to company mission & approach)
-  - Contact → /contact.html (dedicated inquiry & demo booking page)
+  - `Features` → `/#features` (anchor link to Home features section)
+  - `Solutions` → `/#solutions` (anchor link to Home corporate training use cases)
+  - `About` → `/#about` (anchor link to company mission & approach)
+  - `Contact` → `/contact.html` (dedicated inquiry & demo booking page)
 - **Right Action CTAs:**
-  - Sign In (text link) → https://app.lectory.dev/login
-  - Go to App (primary button) → https://app.lectory.dev
+  - `Sign In` (text link) → `https://app.lectory.dev/login`
+  - `Go to App` (primary button) → `https://app.lectory.dev`
+
+### 3.2 Mobile Layout & Responsive Breakpoint (`< 768px`)
+```text
+[ LOGO ]                                                                 [ ☰ MENU ]
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ • Features (/#features)                                                         │
+│ • Solutions (/#solutions)                                                       │
+│ • About (/#about)                                                               │
+│ • Contact (/contact.html)                                                       │
+│ ─────────────────────────────────────────────────────────────────────────────── │
+│ [ Sign In ]                                                                     │
+│ [ Go to App ] (Primary CTA)                                                     │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+- **Header Bar (Mobile):** Shows brand logo on the left and an accessible hamburger toggle button on the right. Inline navigation links and desktop action buttons are hidden from the top bar.
+- **Hamburger Toggle Element:** `<button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation">` with animated 3-bar / close cross icon.
+- **Mobile Drawer / Panel (`#mobile-nav`):** Full-width or right-anchored slide-down overlay container containing all 4 navigation links and stacked action CTAs (`Sign In` and `Go to App`).
+
+### 3.3 Interactive & State Mechanics (Mobile Menu)
+- **Zero Heavy Framework Invariant:** Mobile navigation toggle must use lightweight vanilla JS (<35 LOC) or native CSS toggle without adding third-party UI libraries.
+- **Accessibility & ARIA Contract:**
+  - Toggle button toggles `aria-expanded="true"` / `aria-expanded="false"` and `is-open` class on the navigation drawer.
+  - Pressing the `Escape` key immediately closes the open drawer and returns focus to the toggle button.
+  - Clicking any navigation link inside the drawer automatically dismisses the drawer.
+  - Clicking outside the drawer (backdrop overlay) closes the menu.
+- **Body Scroll Lock:** When the mobile menu drawer is open, scrolling on `document.body` should be locked (`overflow: hidden`) to prevent background scroll drift.
 
 > **Note on Pricing:** Public self-serve pricing tiers are excluded at launch during private beta / design partner phase. All commercial demand and demo requests are channeled directly through the **Contact** page.
 
@@ -48,20 +74,29 @@ The marketing site addresses enterprise buyer and evaluator personas:
 The entire marketing website is fulfilled with **3 content pages + 2 legal pages + 1 recovery page**:
 
 ### 4.1 Home (index.html)
-- **Outcome-Led Hero:** Headline focused on replacing passive training videos with real-time conversational AI avatar simulations + primary CTA (Go to App / Try a Class).
-- **Social Proof / Customer Validation:** Enterprise logos & trust metrics.
-- **Legacy LMS vs. Lectory Comparison Section:** Side-by-side comparison table from product_requirements.md.
-- **Key Features Section (id=features):**
-  - Zero video rendering pipeline (<10s policy edits).
-  - Real-time conversational AI avatar simulation (voice & chat).
-  - Automated rubric scoring & audit-ready compliance reporting.
-- **Solutions Section (id=solutions):**
-  - Compliance & ethics training simulations.
-  - Safe manager role-play sandbox (1-on-1s, feedback, difficult conversations).
-  - Interactive onboarding immersion.
-- **About Section (id=about):**
-  - The Lectory mission: moving enterprise learning from passive video consumption to experiential practice.
-- **Bottom CTA Banner:** Direct link to app player.
+- **Outcome-Led Hero:**
+  - *Layout:* Asymmetric 2-column split (60% content / 40% visual card).
+  - *Left Column:* Category eyebrow badge (`AI-NATIVE COMPLIANCE & TRAINING`), outcome-led H1, sub-headline, proof metric badges (completion rates, cost per trained employee, rollout speed), and dual CTA button group (`Go to App` primary, `Try a Class` secondary deep-link).
+  - *Right Column:* Elevated preview card container displaying a simulated AI classroom session with live avatar prompt exchange.
+  - *Responsive Behavior:* Stacks into single column on mobile (< 768px), prioritizing headline and CTAs above the fold.
+- **Social Proof & Comparison Matrix:**
+  - *Layout:* Centered 2-column comparison table directly contrasting `Legacy LMS Platforms` against `Lectory Lean Admin`.
+  - *Metrics Highlighted:* Time-to-publish (<10s vs weeks), compliance audit exports (1-click vs manual), and video rendering compute (zero vs studio re-encoding).
+- **Key Features Section (`id="features"`):**
+  - *Layout:* 3-column responsive card grid (1 column on mobile, 3 columns on desktop `≥ 1024px`).
+  - *Card Structure:* Top icon badge, bold title, 2-line feature description, and outcome bullet:
+    1. *Zero Video Pipeline:* Render at playback; instant policy updates without studio re-recording.
+    2. *Conversational AI Avatars:* Real-time voice and chat simulations replacing passive video lectures.
+    3. *Audit-Ready Compliance:* Automated rubric scoring and verifiable completion logs.
+- **Solutions Section (`id="solutions"`):**
+  - *Layout:* 3 persona-oriented horizontal use-case cards with badge chips and outcome summaries:
+    1. *Compliance & Ethics Simulations:* Branching real-time scenario evaluations.
+    2. *Managerial Role-Play Sandboxes:* Low-stakes 1-on-1 feedback and difficult conversation practice.
+    3. *Interactive Onboarding Immersion:* First-week active culture and policy assimilation.
+- **About Section (`id="about"`):**
+  - *Layout:* Centered single-column editorial narrative block on Lectory's core mission: shifting corporate learning from passive video consumption to experiential practice.
+- **Bottom CTA Banner:**
+  - *Layout:* Full-width high-contrast container with centered bold headline, secondary trial explanation, and primary launch button (`Launch Lectory Now` → `https://app.lectory.dev`).
 
 ### 4.2 Contact & Inquiries (contact.html)
 - Clean B2B sales and demo inquiry form.

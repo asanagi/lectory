@@ -1,51 +1,165 @@
-# Ship the Go backend to Cloud Run.
-name: Deploy backend
+# Class 5 · Lesson 5.5 — Gated API Delivery Pipeline with Staging & Integration Verification.
+# Pipeline stages:
+# 1. lint: Protobuf and Go static analysis (buf lint, go vet)
+# 2. unit-tests: Fast offline table-driven unit suite (< 2s, without build tags)
+# 3. deploy-staging: Cloud Build & deploy container to user-service-staging on push/merge to main
+# 4. integration-tests: Authenticated end-to-end tests against the staging URL
+# 5. promote-prod: Guarded promotion to production Cloud Run with environment protection rules
+
+name: Gated API Pipeline
 
 on:
   push:
     branches: [main]
     paths:
       - 'services/**'
-      - 'Dockerfile'
+      - '.github/workflows/deploy-api.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/**'
       - '.github/workflows/deploy-api.yml'
 
 jobs:
-  deploy:
+  # --------------------------------------------------------------------------
+  # Stage 1: Static Analysis & Schema Checks
+  # --------------------------------------------------------------------------
+  lint:
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'services/user/go.mod'
+          cache-dependency-path: 'services/user/go.sum'
+
+      - name: Set up Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          version: '1.38.0'
+
+      - name: Lint Protobuf Schemas
+        run: buf lint
+
+      - name: Go Vet & Diagnostics
+        working-directory: services/user
+        run: go vet ./...
+
+  # --------------------------------------------------------------------------
+  # Stage 2: Offline Unit Test Suite (Sub-Second Loopback)
+  # --------------------------------------------------------------------------
+  unit-tests:
+    name: Unit Tests (Offline)
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'services/user/go.mod'
+          cache-dependency-path: 'services/user/go.sum'
+
+      - name: Run Unit Tests with Coverage
+        working-directory: services/user
+        # Runs offline unit tests (httptest fakes); integration tag is excluded
+        run: |
+          go test -v -coverprofile=coverage.out ./...
+          go tool cover -func=coverage.out
+
+  # --------------------------------------------------------------------------
+  # Stage 3: Deploy to Staging Environment
+  # --------------------------------------------------------------------------
+  deploy-staging:
+    name: Deploy to Staging
+    needs: unit-tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+    outputs:
+      staging_url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
       - id: auth
-        name: Authenticate to Google Cloud
+        name: Authenticate to GCP (Staging)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_KEY_STAGING }}
 
-      - name: Deploy to Cloud Run
+      - id: deploy
+        name: Deploy Staging Cloud Run Service
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: user-service
+          project_id: lectory-staging
+          service: user-service-staging
           region: us-central1
           source: .
+          env_vars: |
+            ENV=staging
+            FIREBASE_PROJECT_ID=lectory-staging
+          flags: '--dockerfile=services/user/Dockerfile'
 
-  deploy-staging:
+  # --------------------------------------------------------------------------
+  # Stage 4: Live Staging Integration Tests
+  # --------------------------------------------------------------------------
+  integration-tests:
+    name: Staging Integration Tests
+    needs: deploy-staging
     runs-on: ubuntu-latest
     environment: staging
     steps:
       - uses: actions/checkout@v4
 
-      - id: auth
-        name: Authenticate to Google Cloud
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'services/user/go.mod'
+          cache-dependency-path: 'services/user/go.sum'
+
+      - name: Authenticate to GCP for Test Tokens
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY_STAGING }}
 
-      - name: Deploy to Cloud Run (staging)
+      - name: Run Integration Tests Against Staging Service
+        working-directory: services/user
+        env:
+          USER_SERVICE_URL: ${{ needs.deploy-staging.outputs.staging_url }}
+          FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        # Runs tests gated with //go:build integration
+        run: go test -v -tags=integration -timeout=120s ./...
+
+  # --------------------------------------------------------------------------
+  # Stage 5: Guarded Production Promotion
+  # --------------------------------------------------------------------------
+  promote-prod:
+    name: Promote to Production
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    environment: production # Requires manual approval review in GitHub Settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        name: Authenticate to GCP (Production)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
+
+      - name: Deploy Production Cloud Run Service
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           project_id: lectory-prod
-          service: user-service-staging
+          service: user-service
           region: us-central1
           source: .
-          env_vars: ENV=staging,FIRESTORE_DATABASE=staging
-          flags: '--port=8080'
+          env_vars: |
+            ENV=production
+            FIREBASE_PROJECT_ID=lectory-prod
+          flags: '--dockerfile=services/user/Dockerfile'
